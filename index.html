@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>帶好了嗎？</title>
+<style>
+  /* ===== 色彩與字體 ===== */
+  :root {
+    --sky: #BDE3FF;        /* 背景：天空藍 */
+    --card: #FFFFFF;       /* 卡片白 */
+    --ink: #324B6E;        /* 主文字：深藍 */
+    --coral: #FF7B54;      /* 主按鈕：珊瑚橘 */
+    --coral-dark: #E5633D;
+    --leaf: #4CC36B;       /* 完成綠 */
+    --star: #FFD449;       /* 星星黃 */
+    --soft: #EAF6FF;       /* 淡藍底 */
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "微軟正黑體", "Microsoft JhengHei", system-ui, sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+  .screen {
+    background: var(--card);
+    border-radius: 28px;
+    box-shadow: 0 8px 0 rgba(50,75,110,0.15);
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 24px;
+    text-align: center;
+    display: none;
+  }
+  .screen.active { display: block; animation: pop .35s ease; }
+  @keyframes pop {
+    0%   { transform: scale(.92); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  h1 { font-size: 28px; margin-bottom: 6px; }
+  .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 24px; }
+
+  /* ===== 首頁兩大按鈕 ===== */
+  .mode-btn {
+    width: 100%;
+    border: none;
+    border-radius: 22px;
+    padding: 22px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: inherit;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+    transition: transform .1s;
+  }
+  .mode-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
+  #goBtn   { background: var(--coral); }
+  #homeBtn { background: #5BA8E5; }
+  .resume {
+    display: block;
+    font-size: 13px;
+    font-weight: normal;
+    margin-top: 6px;
+    opacity: .95;
+  }
+
+  /* ===== 核對畫面 ===== */
+  .mode-tag {
+    display: inline-block;
+    background: var(--soft);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .progress { font-size: 16px; margin-bottom: 18px; letter-spacing: 4px; }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--soft);
+    border: 3px solid transparent;
+    border-radius: 18px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s, border-color .15s;
+  }
+  .item .emoji { font-size: 30px; }
+  .item .name  { font-size: 19px; font-weight: bold; flex: 1; text-align: left; }
+  .item .box {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    border: 3px solid #B9CCE0;
+    background: #fff;
+    font-size: 20px;
+    line-height: 26px;
+    color: #fff;
+  }
+  .item.checked { background: #E6F7EC; border-color: var(--leaf); }
+  .item.checked .box { background: var(--leaf); border-color: var(--leaf); }
+  .item.checked .emoji { animation: bounce .4s ease; }
+  @keyframes bounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.4) rotate(-8deg); }
+    100% { transform: scale(1); }
+  }
+
+  .back {
+    background: none;
+    border: none;
+    color: #7A8DA8;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+
+  /* ===== 完成畫面 ===== */
+  .big-emoji { font-size: 64px; animation: party .6s ease; }
+  @keyframes party {
+    0%   { transform: scale(0) rotate(-30deg); }
+    70%  { transform: scale(1.2) rotate(8deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+  #doneTitle { margin-top: 10px; }
+  #doneTime { color: #7A8DA8; font-size: 14px; margin: 10px 0 24px; }
+  .stars { font-size: 26px; letter-spacing: 6px; margin-bottom: 8px; }
+  #homeReturnBtn {
+    background: var(--star);
+    color: var(--ink);
+    border: none;
+    border-radius: 22px;
+    padding: 16px 36px;
+    font-size: 19px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+  }
+  #homeReturnBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
+</style>
+</head>
+<body>
+
+<!-- 畫面一：首頁 -->
+<div class="screen active" id="screenHome">
+  <h1>🏓 帶好了嗎？</h1>
+  <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
+  <button class="mode-btn" id="goBtn">
+    🎒 我要出門了！
+    <span class="resume" id="goResume"></span>
+  </button>
+  <button class="mode-btn" id="homeBtn">
+    🏠 我回到家啦！
+    <span class="resume" id="homeResume"></span>
+  </button>
+</div>
+
+<!-- 畫面二：核對清單 -->
+<div class="screen" id="screenCheck">
+  <span class="mode-tag" id="modeTag"></span>
+  <p class="progress" id="progress"></p>
+  <div id="itemList"></div>
+  <button class="back" id="backBtn">← 先回首頁（進度會記住喔）</button>
+</div>
+
+<!-- 畫面三：完成 -->
+<div class="screen" id="screenDone">
+  <div class="big-emoji" id="doneEmoji">🎉</div>
+  <div class="stars">⭐⭐⭐⭐⭐</div>
+  <h1 id="doneTitle"></h1>
+  <p id="doneTime"></p>
+  <button id="homeReturnBtn">回首頁</button>
+</div>
+
+<script>
+  // ── 資料 ──
+  const ITEMS = [
+    { emoji: "🏓", name: "球拍" },
+    { emoji: "👕", name: "換洗衣物" },
+    { emoji: "📱", name: "手機" },
+    { emoji: "🔑", name: "鑰匙" },
+    { emoji: "👛", name: "錢包" },
+  ];
+  const MODE_INFO = {
+    outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀", key: "checklist_outbound" },
+    inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶回來了，好棒！", doneEmoji: "🎉", key: "checklist_inbound" },
+  };
+
+  let mode = null;        // "outbound" 或 "inbound"
+  let checked = [];       // 五個布林值
+
+  const $ = (id) => document.getElementById(id);
+
+  // ── localStorage 讀寫 ──
+  function loadProgress(m) {
+    try {
+      const raw = localStorage.getItem(MODE_INFO[m].key);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.checked) && data.checked.length === ITEMS.length) return data.checked;
+      return null;
+    } catch (e) { return null; }
+  }
+  function saveProgress() {
+    localStorage.setItem(MODE_INFO[mode].key, JSON.stringify({ checked }));
+  }
+  function clearProgress(m) {
+    localStorage.removeItem(MODE_INFO[m].key);
+  }
+
+  // ── 畫面切換 ──
+  function show(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    $(id).classList.add("active");
+  }
+
+  // ── 首頁：顯示「進行中」提示 ──
+  function renderHome() {
+    const go = loadProgress("outbound");
+    const back = loadProgress("inbound");
+    $("goResume").textContent   = go   ? `已經勾了 ${go.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
+    $("homeResume").textContent = back ? `已經勾了 ${back.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
+    show("screenHome");
+  }
+
+  // ── 核對畫面 ──
+  function startCheck(m) {
+    mode = m;
+    checked = loadProgress(m) || ITEMS.map(() => false);
+    renderCheck();
+    show("screenCheck");
+  }
+
+  function renderCheck() {
+    $("modeTag").textContent = MODE_INFO[mode].tag;
+    $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
+
+    const list = $("itemList");
+    list.innerHTML = "";
+    ITEMS.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "item" + (checked[i] ? " checked" : "");
+      div.innerHTML = `
+        <span class="emoji">${item.emoji}</span>
+        <span class="name">${item.name}</span>
+        <span class="box">${checked[i] ? "✓" : ""}</span>`;
+      div.onclick = () => toggleItem(i);
+      list.appendChild(div);
+    });
+  }
+
+  function toggleItem(i) {
+    checked[i] = !checked[i];   // 點一下打勾，再點取消
+    saveProgress();             // 每一次動作都立刻存檔
+    renderCheck();
+
+    if (checked.every(Boolean)) {
+      setTimeout(finish, 600);  // 停一下，讓孩子看到最後一個勾
+    }
+  }
+
+  // ── 完成 ──
+  function finish() {
+    const info = MODE_INFO[mode];
+    clearProgress(mode);        // 完成的瞬間清掉紀錄，下次是新的一輪
+    $("doneEmoji").textContent = info.doneEmoji;
+    $("doneTitle").textContent = info.doneTitle;
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    $("doneTime").textContent = `完成時間 ${hh}:${mm}`;
+    show("screenDone");
+  }
+
+  // ── 事件綁定 ──
+  $("goBtn").onclick = () => startCheck("outbound");
+  $("homeBtn").onclick = () => startCheck("inbound");
+  $("backBtn").onclick = renderHome;
+  $("homeReturnBtn").onclick = renderHome;
+
+  // 開場
+  renderHome();
+</script>
+
+</body>
+</html>
