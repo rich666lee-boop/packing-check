@@ -235,8 +235,8 @@
   function renderHome() {
     const go = loadProgress("outbound");
     const back = loadProgress("inbound");
-    $("goResume").textContent   = go   ? `已經勾了 ${go.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
-    $("homeResume").textContent = back ? `已經勾了 ${back.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
+   $("goResume").textContent   = (go   && go.filter(Boolean).length   > 0) ? `已經勾了 ${go.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
+    $("homeResume").textContent = (back && back.filter(Boolean).length > 0) ? `已經勾了 ${back.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
     show("screenHome");
   }
 
