@@ -267,7 +267,7 @@
 <!-- 畫面三：整理清單 -->
 <div class="screen" id="screenEdit">
   <h1>✏️ 整理我的東西</h1>
-  <p class="sub">打名字加東西，要帶什麼自己決定！</p>
+  <p class="sub">固定要帶的留著就好，這次多帶的隨時加，不用了再刪！</p>
   <div id="editList"></div>
   <div class="add-row">
     <input class="name-input" id="newItemName" placeholder="例如：水壺" maxlength="10">
@@ -296,7 +296,7 @@
   };
 
   // ── localStorage key ──
-  const ITEMS_KEY = "checklist_items";              // 清單：留著，可增可刪
+  const ITEMS_KEY = "checklist_items";              // 清單：一直留著，由使用者自己增刪
   const PROGRESS_KEY = { outbound: "checklist_outbound", inbound: "checklist_inbound" };
 
   let items = [];         // [{ name, animal }]
@@ -305,7 +305,7 @@
 
   const $ = (id) => document.getElementById(id);
 
-  // ── 清單讀寫（留著的那份）──
+  // ── 清單讀寫（這份永遠留著，只有使用者手動增刪才會變）──
   function loadItems() {
     try {
       const raw = localStorage.getItem(ITEMS_KEY);
@@ -328,19 +328,21 @@
     return best;
   }
 
-  // ── 勾選進度讀寫 ──
+  // ── 勾選進度讀寫（用「物品名稱」記，所以增刪物品不會弄亂已勾的）──
   function loadProgress(m) {
     try {
       const raw = localStorage.getItem(PROGRESS_KEY[m]);
       if (!raw) return null;
       const data = JSON.parse(raw);
-      // 只有當存的長度與目前清單一致才沿用，否則視為新一輪
-      if (Array.isArray(data.checked) && data.checked.length === items.length) return data.checked;
-      return null;
+      if (!data || typeof data.byName !== "object") return null;
+      // 依目前清單組出勾選陣列：清單裡有、但進度沒記到的（新加的）當未勾
+      return items.map(it => !!data.byName[it.name]);
     } catch (e) { return null; }
   }
   function saveProgress() {
-    localStorage.setItem(PROGRESS_KEY[mode], JSON.stringify({ checked }));
+    const byName = {};
+    items.forEach((it, i) => { byName[it.name] = !!checked[i]; });
+    localStorage.setItem(PROGRESS_KEY[mode], JSON.stringify({ byName }));
   }
   function clearProgress(m) {
     localStorage.removeItem(PROGRESS_KEY[m]);
@@ -409,7 +411,7 @@
     }
   }
 
-  // ── 完成 ──
+  // ── 完成（只清掉這次的勾選，清單本身完全不動）──
   function finish() {
     const info = MODE_INFO[mode];
     clearProgress(mode);
@@ -458,11 +460,13 @@
     const input = $("newItemName");
     const name = input.value.trim();
     if (!name) { input.focus(); return; }
+    // 同名的就不重複加，避免進度對應混淆
+    if (items.some(it => it.name === name)) {
+      input.select();
+      return;
+    }
     items.push({ name, animal: pickAnimal() });
-    saveItems();
-    // 清單一改，已存的勾選進度長度就對不上了，清掉避免錯亂
-    clearProgress("outbound");
-    clearProgress("inbound");
+    saveItems();        // 只動清單，不碰任何勾選進度
     input.value = "";
     renderEdit();
     input.focus();
@@ -471,9 +475,7 @@
   function removeItem(i) {
     if (!confirm(`要把「${items[i].name}」刪掉嗎？`)) return;
     items.splice(i, 1);
-    saveItems();
-    clearProgress("outbound");
-    clearProgress("inbound");
+    saveItems();        // 只動清單，不碰任何勾選進度
     renderEdit();
   }
 
