@@ -15,6 +15,7 @@
     --leaf: #4CC36B;       /* 完成綠 */
     --star: #FFD449;       /* 星星黃 */
     --soft: #EAF6FF;       /* 淡藍底 */
+    --pink: #FF9AB5;       /* 刪除粉 */
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -75,6 +76,22 @@
     opacity: .95;
   }
 
+  /* 整理清單入口 */
+  .edit-entry {
+    width: 100%;
+    background: #fff;
+    border: 3px solid var(--star);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .edit-entry:active { transform: translateY(2px); }
+
   /* ===== 核對畫面 ===== */
   .mode-tag {
     display: inline-block;
@@ -85,7 +102,7 @@
     font-weight: bold;
     margin-bottom: 8px;
   }
-  .progress { font-size: 16px; margin-bottom: 18px; letter-spacing: 4px; }
+  .progress { font-size: 16px; margin-bottom: 18px; letter-spacing: 4px; min-height: 20px; }
 
   .item {
     display: flex;
@@ -120,6 +137,16 @@
     100% { transform: scale(1); }
   }
 
+  .empty-hint {
+    background: var(--soft);
+    border-radius: 18px;
+    padding: 28px 16px;
+    color: #7A8DA8;
+    font-size: 16px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
   .back {
     background: none;
     border: none;
@@ -130,6 +157,62 @@
     margin-top: 10px;
     text-decoration: underline;
   }
+
+  /* ===== 整理清單畫面 ===== */
+  .edit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--soft);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .edit-item .e-emoji { font-size: 28px; }
+  .edit-item .e-name { font-size: 18px; font-weight: bold; flex: 1; text-align: left; }
+  .del-btn {
+    border: none;
+    background: var(--pink);
+    color: #fff;
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+  }
+  .del-btn:active { transform: translateY(2px); }
+
+  .add-row {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 8px;
+  }
+  .name-input {
+    flex: 1;
+    border: 3px solid #CDE3F5;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 18px;
+    font-family: inherit;
+    color: var(--ink);
+    min-width: 0;
+  }
+  .name-input:focus { outline: none; border-color: #5BA8E5; }
+  .add-confirm {
+    background: var(--leaf);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 0 22px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    flex-shrink: 0;
+  }
+  .add-confirm:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
 
   /* ===== 完成畫面 ===== */
   .big-emoji { font-size: 64px; animation: party .6s ease; }
@@ -160,7 +243,7 @@
 
 <!-- 畫面一：首頁 -->
 <div class="screen active" id="screenHome">
-  <h1>🏓 帶好了嗎？</h1>
+  <h1>🐻 帶好了嗎？</h1>
   <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
   <button class="mode-btn" id="goBtn">
     🎒 我要出門了！
@@ -170,6 +253,7 @@
     🏠 我要回家啦！
     <span class="resume" id="homeResume"></span>
   </button>
+  <button class="edit-entry" id="editEntryBtn">✏️ 整理我的東西</button>
 </div>
 
 <!-- 畫面二：核對清單 -->
@@ -180,7 +264,19 @@
   <button class="back" id="backBtn">← 先回首頁（進度會記住喔）</button>
 </div>
 
-<!-- 畫面三：完成 -->
+<!-- 畫面三：整理清單 -->
+<div class="screen" id="screenEdit">
+  <h1>✏️ 整理我的東西</h1>
+  <p class="sub">打名字加東西，要帶什麼自己決定！</p>
+  <div id="editList"></div>
+  <div class="add-row">
+    <input class="name-input" id="newItemName" placeholder="例如：水壺" maxlength="10">
+    <button class="add-confirm" id="addItemBtn">加進去</button>
+  </div>
+  <button class="back" id="editBackBtn">← 整理好了，回首頁</button>
+</div>
+
+<!-- 畫面四：完成 -->
 <div class="screen" id="screenDone">
   <div class="big-emoji" id="doneEmoji">🎉</div>
   <div class="stars">⭐⭐⭐⭐⭐</div>
@@ -190,39 +286,64 @@
 </div>
 
 <script>
-  // ── 資料 ──
-  const ITEMS = [
-    { emoji: "🏓", name: "球拍" },
-    { emoji: "👕", name: "換洗衣物" },
-    { emoji: "📱", name: "手機" },
-    { emoji: "🔑", name: "鑰匙" },
-    { emoji: "👛", name: "錢包" },
-  ];
+  // ── 可愛動物裝飾圖（與物品內容無關，只是讓畫面可愛）──
+  const ANIMALS = ["🐻","🐰","🐱","🐶","🦊","🐧","🐸","🐥","🐼","🐨","🐯","🦁","🐮","🐷","🐵","🦉"];
+
+  // ── 模式資訊 ──
   const MODE_INFO = {
-    outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀", key: "checklist_outbound" },
-    inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉", key: "checklist_inbound" },
+    outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀" },
+    inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
 
+  // ── localStorage key ──
+  const ITEMS_KEY = "checklist_items";              // 清單：留著，可增可刪
+  const PROGRESS_KEY = { outbound: "checklist_outbound", inbound: "checklist_inbound" };
+
+  let items = [];         // [{ name, animal }]
   let mode = null;        // "outbound" 或 "inbound"
-  let checked = [];       // 五個布林值
+  let checked = [];       // 與 items 等長的布林陣列
 
   const $ = (id) => document.getElementById(id);
 
-  // ── localStorage 讀寫 ──
+  // ── 清單讀寫（留著的那份）──
+  function loadItems() {
+    try {
+      const raw = localStorage.getItem(ITEMS_KEY);
+      if (!raw) return [];
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data : [];
+    } catch (e) { return []; }
+  }
+  function saveItems() {
+    localStorage.setItem(ITEMS_KEY, JSON.stringify(items));
+  }
+
+  // 為新物品輪流配一隻動物：挑目前清單裡用得最少的，平均分配
+  function pickAnimal() {
+    const count = {};
+    ANIMALS.forEach(a => count[a] = 0);
+    items.forEach(it => { if (count[it.animal] !== undefined) count[it.animal]++; });
+    let best = ANIMALS[0], min = Infinity;
+    ANIMALS.forEach(a => { if (count[a] < min) { min = count[a]; best = a; } });
+    return best;
+  }
+
+  // ── 勾選進度讀寫 ──
   function loadProgress(m) {
     try {
-      const raw = localStorage.getItem(MODE_INFO[m].key);
+      const raw = localStorage.getItem(PROGRESS_KEY[m]);
       if (!raw) return null;
       const data = JSON.parse(raw);
-      if (Array.isArray(data.checked) && data.checked.length === ITEMS.length) return data.checked;
+      // 只有當存的長度與目前清單一致才沿用，否則視為新一輪
+      if (Array.isArray(data.checked) && data.checked.length === items.length) return data.checked;
       return null;
     } catch (e) { return null; }
   }
   function saveProgress() {
-    localStorage.setItem(MODE_INFO[mode].key, JSON.stringify({ checked }));
+    localStorage.setItem(PROGRESS_KEY[mode], JSON.stringify({ checked }));
   }
   function clearProgress(m) {
-    localStorage.removeItem(MODE_INFO[m].key);
+    localStorage.removeItem(PROGRESS_KEY[m]);
   }
 
   // ── 畫面切換 ──
@@ -231,35 +352,48 @@
     $(id).classList.add("active");
   }
 
-  // ── 首頁：顯示「進行中」提示 ──
+  // ── 首頁 ──
   function renderHome() {
+    items = loadItems();
     const go = loadProgress("outbound");
     const back = loadProgress("inbound");
-   $("goResume").textContent   = (go   && go.filter(Boolean).length   > 0) ? `已經勾了 ${go.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
-    $("homeResume").textContent = (back && back.filter(Boolean).length > 0) ? `已經勾了 ${back.filter(Boolean).length}／${ITEMS.length} 樣，繼續吧！` : "";
+    const goN = (go && go.filter(Boolean).length) || 0;
+    const backN = (back && back.filter(Boolean).length) || 0;
+    $("goResume").textContent   = goN   > 0 ? `已經勾了 ${goN}／${items.length} 樣，繼續吧！` : "";
+    $("homeResume").textContent = backN > 0 ? `已經勾了 ${backN}／${items.length} 樣，繼續吧！` : "";
     show("screenHome");
   }
 
   // ── 核對畫面 ──
   function startCheck(m) {
+    items = loadItems();
     mode = m;
-    checked = loadProgress(m) || ITEMS.map(() => false);
+    checked = loadProgress(m) || items.map(() => false);
     renderCheck();
     show("screenCheck");
   }
 
   function renderCheck() {
     $("modeTag").textContent = MODE_INFO[mode].tag;
-    $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
-
     const list = $("itemList");
     list.innerHTML = "";
-    ITEMS.forEach((item, i) => {
+
+    if (items.length === 0) {
+      $("progress").textContent = "";
+      const hint = document.createElement("div");
+      hint.className = "empty-hint";
+      hint.innerHTML = "還沒有東西可以檢查耶！<br>先回首頁，按「整理我的東西」加東西吧 🐰";
+      list.appendChild(hint);
+      return;
+    }
+
+    $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
+    items.forEach((item, i) => {
       const div = document.createElement("div");
       div.className = "item" + (checked[i] ? " checked" : "");
       div.innerHTML = `
-        <span class="emoji">${item.emoji}</span>
-        <span class="name">${item.name}</span>
+        <span class="emoji">${item.animal}</span>
+        <span class="name">${escapeHtml(item.name)}</span>
         <span class="box">${checked[i] ? "✓" : ""}</span>`;
       div.onclick = () => toggleItem(i);
       list.appendChild(div);
@@ -267,19 +401,18 @@
   }
 
   function toggleItem(i) {
-    checked[i] = !checked[i];   // 點一下打勾，再點取消
-    saveProgress();             // 每一次動作都立刻存檔
+    checked[i] = !checked[i];
+    saveProgress();
     renderCheck();
-
-    if (checked.every(Boolean)) {
-      setTimeout(finish, 600);  // 停一下，讓孩子看到最後一個勾
+    if (items.length > 0 && checked.every(Boolean)) {
+      setTimeout(finish, 600);
     }
   }
 
   // ── 完成 ──
   function finish() {
     const info = MODE_INFO[mode];
-    clearProgress(mode);        // 完成的瞬間清掉紀錄，下次是新的一輪
+    clearProgress(mode);
     $("doneEmoji").textContent = info.doneEmoji;
     $("doneTitle").textContent = info.doneTitle;
     const now = new Date();
@@ -289,11 +422,77 @@
     show("screenDone");
   }
 
+  // ── 整理清單 ──
+  function openEdit() {
+    items = loadItems();
+    renderEdit();
+    show("screenEdit");
+  }
+
+  function renderEdit() {
+    const list = $("editList");
+    list.innerHTML = "";
+    if (items.length === 0) {
+      const hint = document.createElement("div");
+      hint.className = "empty-hint";
+      hint.innerHTML = "清單是空的，下面打名字加東西吧！";
+      list.appendChild(hint);
+    } else {
+      items.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "edit-item";
+        div.innerHTML = `
+          <span class="e-emoji">${item.animal}</span>
+          <span class="e-name">${escapeHtml(item.name)}</span>`;
+        const del = document.createElement("button");
+        del.className = "del-btn";
+        del.textContent = "✕";
+        del.onclick = () => removeItem(i);
+        div.appendChild(del);
+        list.appendChild(div);
+      });
+    }
+  }
+
+  function addItem() {
+    const input = $("newItemName");
+    const name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    items.push({ name, animal: pickAnimal() });
+    saveItems();
+    // 清單一改，已存的勾選進度長度就對不上了，清掉避免錯亂
+    clearProgress("outbound");
+    clearProgress("inbound");
+    input.value = "";
+    renderEdit();
+    input.focus();
+  }
+
+  function removeItem(i) {
+    if (!confirm(`要把「${items[i].name}」刪掉嗎？`)) return;
+    items.splice(i, 1);
+    saveItems();
+    clearProgress("outbound");
+    clearProgress("inbound");
+    renderEdit();
+  }
+
+  // ── 防止名稱裡的特殊字元破壞畫面 ──
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
   // ── 事件綁定 ──
   $("goBtn").onclick = () => startCheck("outbound");
   $("homeBtn").onclick = () => startCheck("inbound");
+  $("editEntryBtn").onclick = openEdit;
   $("backBtn").onclick = renderHome;
+  $("editBackBtn").onclick = renderHome;
+  $("addItemBtn").onclick = addItem;
   $("homeReturnBtn").onclick = renderHome;
+  $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
 
   // 開場
   renderHome();
