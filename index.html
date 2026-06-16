@@ -5,17 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>帶好了嗎？</title>
 <style>
-  /* ===== 色彩與字體 ===== */
   :root {
-    --sky: #BDE3FF;        /* 背景：天空藍 */
-    --card: #FFFFFF;       /* 卡片白 */
-    --ink: #324B6E;        /* 主文字：深藍 */
-    --coral: #FF7B54;      /* 主按鈕：珊瑚橘 */
-    --coral-dark: #E5633D;
-    --leaf: #4CC36B;       /* 完成綠 */
-    --star: #FFD449;       /* 星星黃 */
-    --soft: #EAF6FF;       /* 淡藍底 */
-    --pink: #FF9AB5;       /* 刪除粉 */
+    --sky: #BDE3FF;
+    --card: #FFFFFF;
+    --ink: #324B6E;
+    --coral: #FF7B54;
+    --leaf: #4CC36B;
+    --star: #FFD449;
+    --soft: #EAF6FF;
+    --pink: #FF9AB5;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -47,10 +45,49 @@
     * { animation: none !important; transition: none !important; }
   }
 
-  h1 { font-size: 28px; margin-bottom: 6px; }
-  .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 24px; }
+  h1 { font-size: 26px; margin-bottom: 6px; }
+  .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 22px; }
 
-  /* ===== 首頁兩大按鈕 ===== */
+  /* ===== 清單選擇（首頁）===== */
+  .list-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: var(--soft);
+    border: 3px solid transparent;
+    border-radius: 20px;
+    padding: 16px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .1s, border-color .15s;
+    text-align: left;
+    font-family: inherit;
+  }
+  .list-card:active { transform: translateY(2px); }
+  .list-card .l-emoji { font-size: 32px; }
+  .list-card .l-info { flex: 1; min-width: 0; }
+  .list-card .l-name { font-size: 20px; font-weight: bold; color: var(--ink); }
+  .list-card .l-count { font-size: 13px; color: #7A8DA8; margin-top: 2px; }
+  .list-card .l-go { font-size: 22px; color: #B9CCE0; }
+
+  .add-list {
+    width: 100%;
+    border: 3px dashed #9DBEDB;
+    background: #fff;
+    border-radius: 20px;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: inherit;
+    color: #5BA8E5;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .add-list:active { transform: translateY(2px); }
+
+  /* ===== 清單選單（進入某份清單後）===== */
   .mode-btn {
     width: 100%;
     border: none;
@@ -75,8 +112,6 @@
     margin-top: 6px;
     opacity: .95;
   }
-
-  /* 整理清單入口 */
   .edit-entry {
     width: 100%;
     background: #fff;
@@ -214,6 +249,19 @@
   }
   .add-confirm:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
 
+  .delete-list-link {
+    background: none;
+    border: none;
+    color: var(--pink);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 4px;
+    text-decoration: underline;
+    display: block;
+    width: 100%;
+  }
+
   /* ===== 完成畫面 ===== */
   .big-emoji { font-size: 64px; animation: party .6s ease; }
   @keyframes party {
@@ -241,9 +289,17 @@
 </head>
 <body>
 
-<!-- 畫面一：首頁 -->
+<!-- 畫面一：選清單（首頁）-->
 <div class="screen active" id="screenHome">
   <h1>🐻 帶好了嗎？</h1>
+  <p class="sub">選一份清單，或做一份新的！</p>
+  <div id="listCards"></div>
+  <button class="add-list" id="addListBtn">➕ 做一份新清單</button>
+</div>
+
+<!-- 畫面二：清單選單（出門／回家／整理）-->
+<div class="screen" id="screenList">
+  <h1 id="listTitle"></h1>
   <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
   <button class="mode-btn" id="goBtn">
     🎒 我要出門了！
@@ -253,144 +309,192 @@
     🏠 我要回家啦！
     <span class="resume" id="homeResume"></span>
   </button>
-  <button class="edit-entry" id="editEntryBtn">✏️ 整理我的東西</button>
+  <button class="edit-entry" id="editEntryBtn">✏️ 整理這份清單</button>
+  <button class="back" id="listBackBtn">← 回去選別份清單</button>
 </div>
 
-<!-- 畫面二：核對清單 -->
+<!-- 畫面三：核對清單 -->
 <div class="screen" id="screenCheck">
   <span class="mode-tag" id="modeTag"></span>
   <p class="progress" id="progress"></p>
   <div id="itemList"></div>
-  <button class="back" id="backBtn">← 先回首頁（進度會記住喔）</button>
+  <button class="back" id="backBtn">← 先回去（進度會記住喔）</button>
 </div>
 
-<!-- 畫面三：整理清單 -->
+<!-- 畫面四：整理清單 -->
 <div class="screen" id="screenEdit">
-  <h1>✏️ 整理我的東西</h1>
+  <h1 id="editTitle">✏️ 整理清單</h1>
   <p class="sub">固定要帶的留著就好，這次多帶的隨時加，不用了再刪！</p>
   <div id="editList"></div>
   <div class="add-row">
     <input class="name-input" id="newItemName" placeholder="例如：水壺" maxlength="10">
     <button class="add-confirm" id="addItemBtn">加進去</button>
   </div>
-  <button class="back" id="editBackBtn">← 整理好了，回首頁</button>
+  <button class="back" id="editBackBtn">← 整理好了，回去</button>
+  <button class="delete-list-link" id="deleteListBtn">🗑️ 刪掉整份清單</button>
 </div>
 
-<!-- 畫面四：完成 -->
+<!-- 畫面五：完成 -->
 <div class="screen" id="screenDone">
   <div class="big-emoji" id="doneEmoji">🎉</div>
   <div class="stars">⭐⭐⭐⭐⭐</div>
   <h1 id="doneTitle"></h1>
   <p id="doneTime"></p>
-  <button id="homeReturnBtn">回首頁</button>
+  <button id="homeReturnBtn">回去</button>
 </div>
 
 <script>
   // ── 可愛動物裝飾圖（與物品內容無關，只是讓畫面可愛）──
   const ANIMALS = ["🐻","🐰","🐱","🐶","🦊","🐧","🐸","🐥","🐼","🐨","🐯","🦁","🐮","🐷","🐵","🦉"];
 
-  // ── 模式資訊 ──
   const MODE_INFO = {
     outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀" },
     inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
 
-  // ── localStorage key ──
-  const ITEMS_KEY = "checklist_items";              // 清單：一直留著，由使用者自己增刪
-  const PROGRESS_KEY = { outbound: "checklist_outbound", inbound: "checklist_inbound" };
+  // ── localStorage：一筆，裡面裝所有清單 ──
+  // data = { lists: [ { id, name, items:[{name,animal}], progress:{outbound:{byName},inbound:{byName}} } ] }
+  const DATA_KEY = "checklist_data";
 
-  let items = [];         // [{ name, animal }]
-  let mode = null;        // "outbound" 或 "inbound"
-  let checked = [];       // 與 items 等長的布林陣列
+  let data = { lists: [] };
+  let currentListId = null;   // 目前選中的清單
+  let mode = null;            // "outbound" / "inbound"
+  let checked = [];           // 與目前清單 items 等長
 
   const $ = (id) => document.getElementById(id);
 
-  // ── 清單讀寫（這份永遠留著，只有使用者手動增刪才會變）──
-  function loadItems() {
+  // ── 資料讀寫 ──
+  function loadData() {
     try {
-      const raw = localStorage.getItem(ITEMS_KEY);
-      if (!raw) return [];
-      const data = JSON.parse(raw);
-      return Array.isArray(data) ? data : [];
-    } catch (e) { return []; }
+      const raw = localStorage.getItem(DATA_KEY);
+      if (!raw) return { lists: [] };
+      const d = JSON.parse(raw);
+      return (d && Array.isArray(d.lists)) ? d : { lists: [] };
+    } catch (e) { return { lists: [] }; }
   }
-  function saveItems() {
-    localStorage.setItem(ITEMS_KEY, JSON.stringify(items));
-  }
+  function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
+  function uid() { return "L" + Date.now() + Math.random().toString(36).slice(2, 6); }
+  function getList(id) { return data.lists.find(l => l.id === id); }
 
-  // 為新物品輪流配一隻動物：挑目前清單裡用得最少的，平均分配
-  function pickAnimal() {
+  function pickAnimal(list) {
     const count = {};
     ANIMALS.forEach(a => count[a] = 0);
-    items.forEach(it => { if (count[it.animal] !== undefined) count[it.animal]++; });
+    list.items.forEach(it => { if (count[it.animal] !== undefined) count[it.animal]++; });
     let best = ANIMALS[0], min = Infinity;
     ANIMALS.forEach(a => { if (count[a] < min) { min = count[a]; best = a; } });
     return best;
   }
 
-  // ── 勾選進度讀寫（用「物品名稱」記，所以增刪物品不會弄亂已勾的）──
-  function loadProgress(m) {
-    try {
-      const raw = localStorage.getItem(PROGRESS_KEY[m]);
-      if (!raw) return null;
-      const data = JSON.parse(raw);
-      if (!data || typeof data.byName !== "object") return null;
-      // 依目前清單組出勾選陣列：清單裡有、但進度沒記到的（新加的）當未勾
-      return items.map(it => !!data.byName[it.name]);
-    } catch (e) { return null; }
+  // 進度依物品名稱記，增刪物品不會弄亂已勾的
+  function getChecked(list, m) {
+    const byName = (list.progress && list.progress[m] && list.progress[m].byName) || {};
+    return list.items.map(it => !!byName[it.name]);
   }
-  function saveProgress() {
+  function saveChecked(list, m, arr) {
+    if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
     const byName = {};
-    items.forEach((it, i) => { byName[it.name] = !!checked[i]; });
-    localStorage.setItem(PROGRESS_KEY[mode], JSON.stringify({ byName }));
+    list.items.forEach((it, i) => { byName[it.name] = !!arr[i]; });
+    list.progress[m] = { byName };
+    saveData();
   }
-  function clearProgress(m) {
-    localStorage.removeItem(PROGRESS_KEY[m]);
+  function clearChecked(list, m) {
+    if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
+    list.progress[m] = { byName: {} };
+    saveData();
   }
 
-  // ── 畫面切換 ──
   function show(id) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
   }
 
-  // ── 首頁 ──
+  // ── 首頁：列出所有清單 ──
   function renderHome() {
-    items = loadItems();
-    const go = loadProgress("outbound");
-    const back = loadProgress("inbound");
-    const goN = (go && go.filter(Boolean).length) || 0;
-    const backN = (back && back.filter(Boolean).length) || 0;
-    $("goResume").textContent   = goN   > 0 ? `已經勾了 ${goN}／${items.length} 樣，繼續吧！` : "";
-    $("homeResume").textContent = backN > 0 ? `已經勾了 ${backN}／${items.length} 樣，繼續吧！` : "";
+    data = loadData();
+    currentListId = null;
+    const wrap = $("listCards");
+    wrap.innerHTML = "";
+
+    if (data.lists.length === 0) {
+      const hint = document.createElement("div");
+      hint.className = "empty-hint";
+      hint.innerHTML = "還沒有清單喔！<br>按下面做一份新的吧 🐰";
+      wrap.appendChild(hint);
+    } else {
+      data.lists.forEach(list => {
+        const emoji = list.items.length > 0 ? list.items[0].animal : "📋";
+        const card = document.createElement("button");
+        card.className = "list-card";
+        card.innerHTML = `
+          <span class="l-emoji">${emoji}</span>
+          <span class="l-info">
+            <span class="l-name">${escapeHtml(list.name)}</span>
+            <span class="l-count">${list.items.length} 樣東西</span>
+          </span>
+          <span class="l-go">›</span>`;
+        card.onclick = () => openList(list.id);
+        wrap.appendChild(card);
+      });
+    }
     show("screenHome");
+  }
+
+  function addList() {
+    const name = (prompt("這份清單要叫什麼名字？\n（例如：禮拜一、去打球）") || "").trim();
+    if (!name) return;
+    data.lists.push({
+      id: uid(),
+      name: name.slice(0, 12),
+      items: [],
+      progress: { outbound: { byName: {} }, inbound: { byName: {} } }
+    });
+    saveData();
+    renderHome();
+  }
+
+  // ── 清單選單 ──
+  function openList(id) {
+    data = loadData();
+    const list = getList(id);
+    if (!list) { renderHome(); return; }
+    currentListId = id;
+    $("listTitle").textContent = list.name;
+    const go = getChecked(list, "outbound").filter(Boolean).length;
+    const back = getChecked(list, "inbound").filter(Boolean).length;
+    const n = list.items.length;
+    $("goResume").textContent   = go   > 0 ? `已經勾了 ${go}／${n} 樣，繼續吧！` : "";
+    $("homeResume").textContent = back > 0 ? `已經勾了 ${back}／${n} 樣，繼續吧！` : "";
+    show("screenList");
   }
 
   // ── 核對畫面 ──
   function startCheck(m) {
-    items = loadItems();
+    data = loadData();
+    const list = getList(currentListId);
+    if (!list) { renderHome(); return; }
     mode = m;
-    checked = loadProgress(m) || items.map(() => false);
+    checked = getChecked(list, m);
     renderCheck();
     show("screenCheck");
   }
 
   function renderCheck() {
+    const list = getList(currentListId);
     $("modeTag").textContent = MODE_INFO[mode].tag;
-    const list = $("itemList");
-    list.innerHTML = "";
+    const wrap = $("itemList");
+    wrap.innerHTML = "";
 
-    if (items.length === 0) {
+    if (list.items.length === 0) {
       $("progress").textContent = "";
       const hint = document.createElement("div");
       hint.className = "empty-hint";
-      hint.innerHTML = "還沒有東西可以檢查耶！<br>先回首頁，按「整理我的東西」加東西吧 🐰";
-      list.appendChild(hint);
+      hint.innerHTML = "這份清單還沒有東西耶！<br>先回去按「整理這份清單」加東西吧 🐰";
+      wrap.appendChild(hint);
       return;
     }
 
     $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
-    items.forEach((item, i) => {
+    list.items.forEach((item, i) => {
       const div = document.createElement("div");
       div.className = "item" + (checked[i] ? " checked" : "");
       div.innerHTML = `
@@ -398,23 +502,25 @@
         <span class="name">${escapeHtml(item.name)}</span>
         <span class="box">${checked[i] ? "✓" : ""}</span>`;
       div.onclick = () => toggleItem(i);
-      list.appendChild(div);
+      wrap.appendChild(div);
     });
   }
 
   function toggleItem(i) {
+    const list = getList(currentListId);
     checked[i] = !checked[i];
-    saveProgress();
+    saveChecked(list, mode, checked);
     renderCheck();
-    if (items.length > 0 && checked.every(Boolean)) {
+    if (list.items.length > 0 && checked.every(Boolean)) {
       setTimeout(finish, 600);
     }
   }
 
-  // ── 完成（只清掉這次的勾選，清單本身完全不動）──
+  // ── 完成：只清這份清單這個模式的勾選，物品與別份都不動 ──
   function finish() {
+    const list = getList(currentListId);
     const info = MODE_INFO[mode];
-    clearProgress(mode);
+    clearChecked(list, mode);
     $("doneEmoji").textContent = info.doneEmoji;
     $("doneTitle").textContent = info.doneTitle;
     const now = new Date();
@@ -426,21 +532,25 @@
 
   // ── 整理清單 ──
   function openEdit() {
-    items = loadItems();
+    data = loadData();
+    const list = getList(currentListId);
+    if (!list) { renderHome(); return; }
+    $("editTitle").textContent = "✏️ 整理「" + list.name + "」";
     renderEdit();
     show("screenEdit");
   }
 
   function renderEdit() {
-    const list = $("editList");
-    list.innerHTML = "";
-    if (items.length === 0) {
+    const list = getList(currentListId);
+    const wrap = $("editList");
+    wrap.innerHTML = "";
+    if (list.items.length === 0) {
       const hint = document.createElement("div");
       hint.className = "empty-hint";
       hint.innerHTML = "清單是空的，下面打名字加東西吧！";
-      list.appendChild(hint);
+      wrap.appendChild(hint);
     } else {
-      items.forEach((item, i) => {
+      list.items.forEach((item, i) => {
         const div = document.createElement("div");
         div.className = "edit-item";
         div.innerHTML = `
@@ -451,35 +561,41 @@
         del.textContent = "✕";
         del.onclick = () => removeItem(i);
         div.appendChild(del);
-        list.appendChild(div);
+        wrap.appendChild(div);
       });
     }
   }
 
   function addItem() {
+    const list = getList(currentListId);
     const input = $("newItemName");
     const name = input.value.trim();
     if (!name) { input.focus(); return; }
-    // 同名的就不重複加，避免進度對應混淆
-    if (items.some(it => it.name === name)) {
-      input.select();
-      return;
-    }
-    items.push({ name, animal: pickAnimal() });
-    saveItems();        // 只動清單，不碰任何勾選進度
+    if (list.items.some(it => it.name === name)) { input.select(); return; }
+    list.items.push({ name, animal: pickAnimal(list) });
+    saveData();
     input.value = "";
     renderEdit();
     input.focus();
   }
 
   function removeItem(i) {
-    if (!confirm(`要把「${items[i].name}」刪掉嗎？`)) return;
-    items.splice(i, 1);
-    saveItems();        // 只動清單，不碰任何勾選進度
+    const list = getList(currentListId);
+    if (!confirm(`要把「${list.items[i].name}」刪掉嗎？`)) return;
+    list.items.splice(i, 1);
+    saveData();
     renderEdit();
   }
 
-  // ── 防止名稱裡的特殊字元破壞畫面 ──
+  function deleteList() {
+    const list = getList(currentListId);
+    if (!confirm(`要刪掉整份「${list.name}」清單嗎？\n裡面的東西都會一起不見喔。`)) return;
+    const idx = data.lists.findIndex(l => l.id === currentListId);
+    if (idx >= 0) data.lists.splice(idx, 1);
+    saveData();
+    renderHome();
+  }
+
   function escapeHtml(s) {
     return String(s)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -487,13 +603,16 @@
   }
 
   // ── 事件綁定 ──
+  $("addListBtn").onclick = addList;
   $("goBtn").onclick = () => startCheck("outbound");
   $("homeBtn").onclick = () => startCheck("inbound");
   $("editEntryBtn").onclick = openEdit;
-  $("backBtn").onclick = renderHome;
-  $("editBackBtn").onclick = renderHome;
+  $("listBackBtn").onclick = renderHome;
+  $("backBtn").onclick = () => openList(currentListId);
+  $("editBackBtn").onclick = () => openList(currentListId);
   $("addItemBtn").onclick = addItem;
-  $("homeReturnBtn").onclick = renderHome;
+  $("deleteListBtn").onclick = deleteList;
+  $("homeReturnBtn").onclick = () => openList(currentListId);
   $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
 
   // 開場
