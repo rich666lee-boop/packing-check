@@ -806,6 +806,7 @@
     setTimeout(function(){ $("locInput").focus(); },200);
   }
 
+  /* ---------- geocoding（Nominatim / OpenStreetMap）---------- */
   var geoTimer=null, geoSeq=0;
   function geocode(query, statusEl, listEl, charImgEl, onPick){
     clearTimeout(geoTimer);
@@ -816,19 +817,29 @@
       var myseq=++geoSeq;
       statusEl.textContent = tt("locSearching");
       if(charImgEl) charImgEl.src = CHAR_IMG[draft.char].think;
-      var url="https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(q)+"&count=6&language="+(draft.lang==="zh"?"zh":"en");
-      fetch(url).then(function(r){ return r.json(); }).then(function(res){
+      var lc=(draft.lang==="zh")?"zh-TW":"en";
+      var url="https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&accept-language="+lc+"&q="+encodeURIComponent(q);
+      fetch(url, { headers: { "Accept":"application/json" } })
+      .then(function(r){ return r.json(); }).then(function(res){
         if(myseq!==geoSeq) return;
         if(charImgEl) charImgEl.src = CHAR_IMG[draft.char].smile;
         statusEl.textContent="";
-        if(!res.results || res.results.length===0){ statusEl.textContent=tt("locNotFound"); return; }
+        if(!res || res.length===0){ statusEl.textContent=tt("locNotFound"); return; }
         listEl.innerHTML="";
-        res.results.forEach(function(item){
+        res.forEach(function(item){
+          var a=item.address||{};
+          var cityName = a.city || a.town || a.village || a.suburb || a.city_district
+                       || a.county || a.state || (item.display_name||"").split(",")[0];
+          var regionParts=[];
+          if(a.state && a.state!==cityName) regionParts.push(a.state);
+          if(a.country) regionParts.push(a.country);
+          var region=regionParts.join(", ");
           var div=document.createElement("div");
           div.className="loc-item";
-          var region=[item.admin1, item.country].filter(Boolean).join(", ");
-          div.innerHTML='<div class="lc-city">'+escapeHtml(item.name)+'</div><div class="lc-region">'+escapeHtml(region)+'</div>';
-          div.onclick=function(){ onPick(item); };
+          div.innerHTML='<div class="lc-city">'+escapeHtml(cityName)+'</div><div class="lc-region">'+escapeHtml(region)+'</div>';
+          div.onclick=function(){
+            onPick({ name:cityName, latitude:parseFloat(item.lat), longitude:parseFloat(item.lon) });
+          };
           listEl.appendChild(div);
         });
       }).catch(function(){
@@ -836,7 +847,7 @@
         if(charImgEl) charImgEl.src = CHAR_IMG[draft.char].smile;
         statusEl.textContent=tt("locNotFound");
       });
-    },300);
+    },350);
   }
   $("locInput").addEventListener("input",function(){
     geocode(this.value, $("locStatus"), $("locList"), $("locChar"), function(item){
