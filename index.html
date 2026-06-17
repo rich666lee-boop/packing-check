@@ -55,7 +55,6 @@
 
   .char-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
   .char-img { height: 150px; width: auto; object-fit: contain; }
-  .char-img.small { height: 90px; }
   .bubble {
     position: relative;
     background: var(--soft);
@@ -133,25 +132,6 @@
   }
   .name-input:focus, .loc-input:focus { outline: none; border-color: var(--blue); }
 
-  .loc-list { text-align: left; margin-bottom: 10px; }
-  .loc-item {
-    background: var(--soft); border-radius: 14px; padding: 12px 14px; margin-bottom: 8px;
-    cursor: pointer; font-size: 17px;
-  }
-  .loc-item:active { background: #DCEEFB; }
-  .loc-item .lc-city { font-weight: bold; }
-  .loc-item .lc-region { font-size: 13px; color: #7A8DA8; margin-top: 2px; }
-  .loc-status { color: #7A8DA8; font-size: 15px; margin-bottom: 10px; min-height: 22px; }
-
-  .weather-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--soft); border-radius: 18px; padding: 12px 16px; margin-bottom: 16px;
-  }
-  .weather-bar .wb-date { font-size: 14px; color: #7A8DA8; text-align: left; }
-  .weather-bar .wb-main { display: flex; align-items: center; gap: 8px; }
-  .weather-bar .wb-icon { font-size: 30px; }
-  .weather-bar .wb-temp { font-size: 22px; font-weight: bold; }
-  .weather-bar .wb-rain { font-size: 13px; color: var(--blue); }
   .settings-btn {
     background: none; border: none; font-size: 24px; cursor: pointer; color: #7A8DA8;
     position: absolute; top: 18px; right: 20px;
@@ -251,12 +231,6 @@
     background: none; border: none; color: var(--pink); font-size: 14px; font-family: inherit;
     cursor: pointer; margin-top: 4px; text-decoration: underline; display: block; width: 100%;
   }
-  .big-emoji { font-size: 64px; animation: party .6s ease; }
-  @keyframes party {
-    0%   { transform: scale(0) rotate(-30deg); }
-    70%  { transform: scale(1.2) rotate(8deg); }
-    100% { transform: scale(1) rotate(0); }
-  }
   .done-char { height: 130px; width: auto; margin-bottom: 6px; }
   #doneTitle { margin-top: 6px; }
   #doneTime { color: #7A8DA8; font-size: 14px; margin: 10px 0 24px; }
@@ -332,33 +306,11 @@
   <button class="big-btn leaf disabled" id="genderNext" disabled></button>
 </div>
 
-<!-- S5 所在地頁 -->
-<div class="screen" id="scLoc">
-  <div class="dots" data-step="4"></div>
-  <div class="char-wrap">
-    <img class="char-img" id="locChar" src="" alt="">
-    <div class="bubble" id="locBubble"></div>
-  </div>
-  <input class="loc-input" id="locInput" placeholder="">
-  <div class="loc-status" id="locStatus"></div>
-  <div class="loc-list" id="locList"></div>
-</div>
-
 <!-- ============ 主程式畫面 ============ -->
 
 <!-- 選清單（首頁）-->
 <div class="screen" id="screenHome">
   <button class="settings-btn" id="openSettings">⚙️</button>
-  <div class="weather-bar" id="weatherBar" style="display:none;">
-    <div class="wb-date" id="wbDate"></div>
-    <div class="wb-main">
-      <span class="wb-icon" id="wbIcon"></span>
-      <div>
-        <div class="wb-temp" id="wbTemp"></div>
-        <div class="wb-rain" id="wbRain"></div>
-      </div>
-    </div>
-  </div>
   <h1 id="homeTitle">🐻 帶好了嗎？</h1>
   <p class="sub" id="homeSub"></p>
   <div id="listCards"></div>
@@ -423,10 +375,6 @@
       <button class="gender-btn" id="setBoy" style="padding:12px;"><span class="g-emoji">👦</span><span id="setBoyLabel"></span></button>
       <button class="gender-btn" id="setGirl" style="padding:12px;"><span class="g-emoji">👧</span><span id="setGirlLabel"></span></button>
     </div>
-    <h3 id="setLocTitle"></h3>
-    <input class="loc-input" id="setLocInput" style="text-align:left;">
-    <div class="loc-status" id="setLocStatus"></div>
-    <div class="loc-list" id="setLocList"></div>
   </div>
   <button class="big-btn leaf" id="setSave"></button>
   <button class="back" id="setBack"></button>
@@ -452,9 +400,6 @@
       namePh:"打上你的名字",
       nameNext:"好了",
       gBoy:"男生", gGirl:"女生", genderNext:"下一步",
-      locPh:"打城市的名字，例如：台北",
-      locSearching:"我看看喔…",
-      locNotFound:"找不到這個地方，換個字看看？",
       homeSub:"選一份清單，或做一份新的！",
       addList:"➕ 做一份新清單",
       listSub:"出門前、回家前，勾勾看東西都在嗎！",
@@ -478,10 +423,7 @@
       doneOut:"全部帶齊，出發囉！", doneIn:"全部帶上了，好棒！",
       doneTime:function(h,m){ return "完成時間 "+h+":"+m; },
       setTitle:"⚙️ 設定", setLang:"語言", setChar:"夥伴", setName:"名字",
-      setGender:"性別", setLoc:"所在地", setSave:"存好了", setBack:"← 回去",
-      weekdays:["日","一","二","三","四","五","六"],
-      dateFmt:function(y,mo,d,w){ return y+"年"+mo+"月"+d+"日（"+w+"）"; },
-      rainLabel:function(p){ return "降雨 "+p+"%"; }
+      setGender:"性別", setSave:"存好了", setBack:"← 回去"
     },
     en: {
       charTitle:"Pick a partner to get ready with you!",
@@ -489,9 +431,6 @@
       namePh:"Type your name",
       nameNext:"Done",
       gBoy:"Boy", gGirl:"Girl", genderNext:"Next",
-      locPh:"Type a city, e.g. Taipei",
-      locSearching:"Let me see…",
-      locNotFound:"Can't find that place. Try another word?",
       homeSub:"Pick a list, or make a new one!",
       addList:"➕ Make a new list",
       listSub:"Before you go out or come home, check everything's here!",
@@ -515,10 +454,7 @@
       doneOut:"All packed, let's go!", doneIn:"All brought back, great job!",
       doneTime:function(h,m){ return "Finished at "+h+":"+m; },
       setTitle:"⚙️ Settings", setLang:"Language", setChar:"Partner", setName:"Name",
-      setGender:"Gender", setLoc:"Location", setSave:"Save", setBack:"← Back",
-      weekdays:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
-      dateFmt:function(y,mo,d,w){ return w+", "+mo+"/"+d+"/"+y; },
-      rainLabel:function(p){ return "Rain "+p+"%"; }
+      setGender:"Gender", setSave:"Save", setBack:"← Back"
     }
   };
 
@@ -534,26 +470,6 @@
     ask_gender: {
       awei:{ zh:"○○你好！你是男生，還是女生呢？", en:"Hi, ○○! Are you a boy or a girl?" },
       xiaoqing:{ zh:"○○你好呀～你是男生，還是女生呢？", en:"Hi, ○○! Are you a boy or a girl?" }
-    },
-    ask_location: {
-      awei:{ zh:"○○住在哪裡呢？告訴我，我幫你看天氣！", en:"Where do you live, ○○? I'll check the weather!" },
-      xiaoqing:{ zh:"○○住在哪裡呀？我來幫你看看天氣喔～", en:"○○, where do you live? I'll look at the weather for you!" }
-    },
-    searching: {
-      awei:{ zh:"我看看喔…", en:"Let me see…" },
-      xiaoqing:{ zh:"我找找看喔～", en:"I'll have a look…" }
-    },
-    weather_sunny: {
-      awei:{ zh:"○○早安！今天天氣很好，我們來想想要帶什麼吧！", en:"Good morning, ○○! It's sunny today. Let's think what to bring!" },
-      xiaoqing:{ zh:"○○早安呀～今天天氣好好，我們一起想想要帶什麼好嗎？", en:"Good morning, ○○! It's such a sunny day. Let's think together what to bring, okay?" }
-    },
-    weather_rainy: {
-      awei:{ zh:"○○，今天會下雨喔！要帶雨傘嗎？", en:"○○, it's rainy today! Do you want to take an umbrella?" },
-      xiaoqing:{ zh:"○○，今天會下雨呢～我們帶把傘好嗎？", en:"○○, it's going to rain today. Shall we take an umbrella, okay?" }
-    },
-    weather_cold: {
-      awei:{ zh:"○○，今天有點冷喔！要不要帶外套？", en:"○○, it's a bit cold today! Do you want to take a jacket?" },
-      xiaoqing:{ zh:"○○，今天有點冷呢～帶件外套好不好？", en:"○○, it's a little cold today. Let's take a jacket, okay?" }
     },
     checklist_enter: {
       awei:{ zh:"我們一起來看看，東西都帶了嗎？", en:"Let's check together. Do you have everything?" },
@@ -676,7 +592,7 @@
     for(var k=0;k<ds.length;k++){
       var step=parseInt(ds[k].getAttribute("data-step"),10);
       ds[k].innerHTML="";
-      for(var i=0;i<5;i++){
+      for(var i=0;i<4;i++){
         var d=document.createElement("span");
         d.className="dot"+(i<=step?" on":"");
         ds[k].appendChild(d);
@@ -687,7 +603,7 @@
   var draft = {};
 
   function startOnboarding(){
-    draft = { lang:"zh", char:null, name:"", gender:null, city:"", lat:null, lon:null };
+    draft = { lang:"zh", char:null, name:"", gender:null };
     renderDots();
     buildLangMenu();
     show("scLang");
@@ -742,7 +658,7 @@
   $("charConfirm").onclick=function(){ if(draft.char) gotoNamePage(); };
 
   function tempProfile(extra){
-    var p={ lang:draft.lang, char:draft.char, name:draft.name||"", gender:draft.gender, city:draft.city };
+    var p={ lang:draft.lang, char:draft.char, name:draft.name||"", gender:draft.gender };
     if(extra) for(var k in extra) p[k]=extra[k];
     return p;
   }
@@ -791,107 +707,12 @@
   }
   $("gBoy").onclick=function(){ pickGender("boy"); };
   $("gGirl").onclick=function(){ pickGender("girl"); };
-  $("genderNext").onclick=function(){ if(draft.gender) gotoLocPage(); };
-
-  function gotoLocPage(){
-    renderDots();
-    $("locChar").src = CHAR_IMG[draft.char].smile;
-    var prev=profile; profile=tempProfile();
-    $("locBubble").textContent = voiceText("ask_location");
-    speakKey("ask_location");
-    profile=prev;
-    $("locInput").placeholder = tt("locPh");
-    $("locInput").value=""; $("locStatus").textContent=""; $("locList").innerHTML="";
-    show("scLoc");
-    setTimeout(function(){ $("locInput").focus(); },200);
-  }
-
-  /* ---------- geocoding（Nominatim / OpenStreetMap）---------- */
-  var geoTimer=null, geoSeq=0;
-  function geocode(query, statusEl, listEl, charImgEl, onPick){
-    clearTimeout(geoTimer);
-    var q=query.trim();
-    listEl.innerHTML="";
-    if(q.length<1){ statusEl.textContent=""; return; }
-    geoTimer=setTimeout(function(){
-      var myseq=++geoSeq;
-      statusEl.textContent = tt("locSearching");
-      if(charImgEl) charImgEl.src = CHAR_IMG[draft.char].think;
-      var lc=(draft.lang==="zh")?"zh-TW":"en";
-      var url="https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&accept-language="+lc+"&q="+encodeURIComponent(q);
-      fetch(url, { headers: { "Accept":"application/json" } })
-      .then(function(r){ return r.json(); }).then(function(res){
-        if(myseq!==geoSeq) return;
-        if(charImgEl) charImgEl.src = CHAR_IMG[draft.char].smile;
-        statusEl.textContent="";
-        if(!res || res.length===0){ statusEl.textContent=tt("locNotFound"); return; }
-        listEl.innerHTML="";
-        res.forEach(function(item){
-          var a=item.address||{};
-          var cityName = a.city || a.town || a.village || a.suburb || a.city_district
-                       || a.county || a.state || (item.display_name||"").split(",")[0];
-          var regionParts=[];
-          if(a.state && a.state!==cityName) regionParts.push(a.state);
-          if(a.country) regionParts.push(a.country);
-          var region=regionParts.join(", ");
-          var div=document.createElement("div");
-          div.className="loc-item";
-          div.innerHTML='<div class="lc-city">'+escapeHtml(cityName)+'</div><div class="lc-region">'+escapeHtml(region)+'</div>';
-          div.onclick=function(){
-            onPick({ name:cityName, latitude:parseFloat(item.lat), longitude:parseFloat(item.lon) });
-          };
-          listEl.appendChild(div);
-        });
-      }).catch(function(){
-        if(myseq!==geoSeq) return;
-        if(charImgEl) charImgEl.src = CHAR_IMG[draft.char].smile;
-        statusEl.textContent=tt("locNotFound");
-      });
-    },350);
-  }
-  $("locInput").addEventListener("input",function(){
-    geocode(this.value, $("locStatus"), $("locList"), $("locChar"), function(item){
-      draft.city=item.name; draft.lat=item.latitude; draft.lon=item.longitude;
-      finishOnboarding();
-    });
-  });
+  $("genderNext").onclick=function(){ if(draft.gender) finishOnboarding(); };
 
   function finishOnboarding(){
-    profile = { lang:draft.lang, char:draft.char, name:draft.name, gender:draft.gender,
-                city:draft.city, lat:draft.lat, lon:draft.lon };
+    profile = { lang:draft.lang, char:draft.char, name:draft.name, gender:draft.gender };
     saveProfile();
     enterHome();
-  }
-
-  function weatherCategory(code, tempMax){
-    if (code >= 51) return "rainy";
-    if (typeof tempMax === "number" && tempMax < 16) return "cold";
-    return "sunny";
-  }
-  function weatherIcon(cat){ return cat==="rainy"?"🌧️":(cat==="cold"?"🧥":"☀️"); }
-
-  function fetchWeather(){
-    var bar=$("weatherBar");
-    if(!profile || profile.lat==null){ bar.style.display="none"; return; }
-    var now=new Date();
-    var l=L();
-    var w=l.weekdays[now.getDay()];
-    $("wbDate").textContent = l.dateFmt(now.getFullYear(), now.getMonth()+1, now.getDate(), w);
-    var url="https://api.open-meteo.com/v1/forecast?latitude="+profile.lat+"&longitude="+profile.lon
-          +"&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1";
-    fetch(url).then(function(r){ return r.json(); }).then(function(res){
-      if(!res.daily){ bar.style.display="none"; return; }
-      var code=res.daily.weather_code[0];
-      var tmax=res.daily.temperature_2m_max[0];
-      var tmin=res.daily.temperature_2m_min[0];
-      var rain=res.daily.precipitation_probability_max[0];
-      var cat=weatherCategory(code, tmax);
-      $("wbIcon").textContent=weatherIcon(cat);
-      $("wbTemp").textContent=Math.round(tmin)+"°~"+Math.round(tmax)+"°";
-      $("wbRain").textContent=L().rainLabel(rain==null?0:rain);
-      bar.style.display="flex";
-      speakKey(cat==="rainy"?"weather_rainy":(cat==="cold"?"weather_cold":"weather_sunny"));
-    }).catch(function(){ bar.style.display="none"; });
   }
 
   function enterHome(){
@@ -899,7 +720,6 @@
     MODE_INFO.outbound={ tag:L().tagOut, doneTitle:L().doneOut, doneImg:CHAR_IMG[chr()].happy };
     MODE_INFO.inbound ={ tag:L().tagIn,  doneTitle:L().doneIn,  doneImg:CHAR_IMG[chr()].happy };
     renderHome();
-    fetchWeather();
   }
 
   function renderHome(){
@@ -1066,18 +886,14 @@
   }
 
   var setDraft = {};
-  var setGeoSel = null;
   function openSettings(){
-    setDraft = { lang:profile.lang, char:profile.char, name:profile.name,
-                 gender:profile.gender, city:profile.city, lat:profile.lat, lon:profile.lon };
-    setGeoSel = null;
+    setDraft = { lang:profile.lang, char:profile.char, name:profile.name, gender:profile.gender };
     var l=L();
     $("setTitle").textContent=l.setTitle;
     $("setLangTitle").textContent=l.setLang;
     $("setCharTitle").textContent=l.setChar;
     $("setNameTitle").textContent=l.setName;
     $("setGenderTitle").textContent=l.setGender;
-    $("setLocTitle").textContent=l.setLoc;
     $("setSave").textContent=l.setSave;
     $("setBack").textContent=l.setBack;
     $("setBoyLabel").textContent=l.gBoy;
@@ -1090,8 +906,6 @@
       sel.appendChild(o);
     });
     $("setNameInput").value=setDraft.name;
-    $("setLocInput").value=setDraft.city||"";
-    $("setLocStatus").textContent=""; $("setLocList").innerHTML="";
     reflectSetChar(); reflectSetGender();
     show("screenSettings");
   }
@@ -1108,25 +922,12 @@
   $("setBoy").onclick=function(){ setDraft.gender="boy"; reflectSetGender(); };
   $("setGirl").onclick=function(){ setDraft.gender="girl"; reflectSetGender(); };
   $("setLangSelect").onchange=function(){ setDraft.lang=this.value; };
-  $("setLocInput").addEventListener("input",function(){
-    var savedLang=draft.lang; draft.lang=setDraft.lang;
-    var savedChar=draft.char; draft.char=setDraft.char;
-    geocode(this.value, $("setLocStatus"), $("setLocList"), null, function(item){
-      setDraft.city=item.name; setDraft.lat=item.latitude; setDraft.lon=item.longitude;
-      setGeoSel=item;
-      $("setLocInput").value=item.name;
-      $("setLocList").innerHTML="";
-      $("setLocStatus").textContent="✓ "+item.name;
-    });
-    draft.lang=savedLang; draft.char=savedChar;
-  });
   $("setSave").onclick=function(){
     profile.lang=setDraft.lang;
     profile.char=setDraft.char;
     var nm=$("setNameInput").value.trim();
     if(nm) profile.name=nm.slice(0,12);
     profile.gender=setDraft.gender;
-    if(setGeoSel){ profile.city=setDraft.city; profile.lat=setDraft.lat; profile.lon=setDraft.lon; }
     saveProfile();
     enterHome();
   };
