@@ -946,12 +946,11 @@
   $("homeReturnBtn").onclick=function(){ openList(currentListId); };
   $("newItemName").addEventListener("keydown",function(e){ if(e.key==="Enter") addItem(); });
 
-  profile=loadProfile();
-  if(profile && profile.char && profile.name){
-    enterHome();
-  } else {
-    startOnboarding();
-  }
+  /* ========== 開場 ========== */
+  /* 一次性強制重設：清掉舊設定，保證從語言頁開始 */
+  try { localStorage.removeItem(PROFILE_KEY); } catch(e){}
+  profile=null;
+  startOnboarding();
 </script>
 </body>
 </html>
