@@ -14,7 +14,6 @@
     --star: #FFD449;
     --soft: #EAF6FF;
     --pink: #FF9AB5;
-    --blue: #5BA8E5;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -33,7 +32,7 @@
     box-shadow: 0 8px 0 rgba(50,75,110,0.15);
     width: 100%;
     max-width: 420px;
-    padding: 28px 24px;
+    padding: 32px 24px;
     text-align: center;
     display: none;
   }
@@ -49,99 +48,22 @@
   h1 { font-size: 26px; margin-bottom: 6px; }
   .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 22px; }
 
-  .dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
-  .dots .dot { width: 10px; height: 10px; border-radius: 50%; background: #D7E7F5; transition: background .2s; }
-  .dots .dot.on { background: var(--blue); }
-
-  .char-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
-  .char-img { height: 150px; width: auto; object-fit: contain; }
-  .bubble {
-    position: relative;
-    background: var(--soft);
-    border-radius: 18px;
-    padding: 14px 18px;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--ink);
-    margin: 10px auto 0;
-    max-width: 320px;
-    line-height: 1.5;
-  }
-  .bubble::after {
-    content: "";
-    position: absolute;
-    top: -12px; left: 50%;
-    transform: translateX(-50%);
-    border: 8px solid transparent;
-    border-bottom-color: var(--soft);
-  }
-
-  .lang-wrap { position: relative; width: 100%; max-width: 300px; margin: 30px auto 0; }
-  .lang-btn {
-    width: 100%; height: 64px; border-radius: 18px;
-    border: 3px solid var(--blue); background: #fff; color: var(--ink);
-    font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 14px;
-    cursor: pointer; font-family: inherit;
-  }
-  .lang-globe { font-size: 30px; }
-  .lang-finger { position: absolute; right: -4px; top: 52px; font-size: 34px; pointer-events: none; }
-  .lang-menu { display: none; margin-top: 12px; background: #fff; border-radius: 18px; border: 3px solid #CDE3F5; overflow: hidden; }
-  .lang-menu button {
-    width: 100%; height: 54px; border: none; border-bottom: 1px solid var(--soft);
-    background: #fff; color: var(--ink); font-size: 20px; cursor: pointer; font-family: inherit;
-  }
-  .lang-menu button:active { background: var(--soft); }
-
-  .pick-row { display: flex; gap: 14px; justify-content: center; margin-bottom: 18px; }
-  .pick-card {
-    flex: 1; background: var(--soft); border: 4px solid transparent; border-radius: 22px;
-    padding: 14px 8px 10px; cursor: pointer; transition: transform .12s, border-color .15s, opacity .15s;
-    font-family: inherit;
-  }
-  .pick-card img { height: 140px; width: auto; object-fit: contain; }
-  .pick-card .pick-name { font-size: 20px; font-weight: bold; margin-top: 6px; }
-  .pick-card.sel { border-color: var(--leaf); transform: translateY(-4px); }
-  .pick-card.dim { opacity: .45; }
-
-  .big-btn {
-    width: 100%; border: none; border-radius: 22px; padding: 18px;
-    font-size: 21px; font-weight: bold; font-family: inherit; color: #fff;
-    cursor: pointer; margin-top: 6px; box-shadow: 0 5px 0 rgba(0,0,0,0.12);
-    transition: transform .1s;
-  }
-  .big-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
-  .big-btn.coral { background: var(--coral); }
-  .big-btn.blue { background: var(--blue); }
-  .big-btn.leaf { background: var(--leaf); }
-  .big-btn.disabled { background: #C3D3E2; cursor: default; box-shadow: 0 5px 0 rgba(0,0,0,0.06); }
-
-  .gender-row { display: flex; gap: 14px; margin-bottom: 8px; }
-  .gender-btn {
-    flex: 1; background: var(--soft); border: 4px solid transparent; border-radius: 22px;
-    padding: 22px 8px; font-size: 22px; font-weight: bold; font-family: inherit; color: var(--ink);
-    cursor: pointer; transition: transform .12s, border-color .15s;
-  }
-  .gender-btn .g-emoji { font-size: 40px; display: block; margin-bottom: 6px; }
-  .gender-btn:active { transform: translateY(2px); }
-  .gender-btn.sel { border-color: var(--blue); }
-
-  .name-input, .loc-input {
-    width: 100%; border: 3px solid #CDE3F5; border-radius: 16px;
-    padding: 14px 16px; font-size: 20px; font-family: inherit; color: var(--ink);
-    text-align: center; margin-bottom: 12px;
-  }
-  .name-input:focus, .loc-input:focus { outline: none; border-color: var(--blue); }
-
-  .settings-btn {
-    background: none; border: none; font-size: 24px; cursor: pointer; color: #7A8DA8;
-    position: absolute; top: 18px; right: 20px;
-  }
-
+  /* ===== 清單選擇（首頁）===== */
   .list-card {
-    display: flex; align-items: center; gap: 12px; width: 100%;
-    background: var(--soft); border: 3px solid transparent; border-radius: 20px;
-    padding: 16px; margin-bottom: 12px; cursor: pointer; user-select: none;
-    transition: transform .1s, border-color .15s; text-align: left; font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: var(--soft);
+    border: 3px solid transparent;
+    border-radius: 20px;
+    padding: 16px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .1s, border-color .15s;
+    text-align: left;
+    font-family: inherit;
   }
   .list-card:active { transform: translateY(2px); }
   .list-card .l-emoji { font-size: 32px; }
@@ -149,44 +71,97 @@
   .list-card .l-name { font-size: 20px; font-weight: bold; color: var(--ink); }
   .list-card .l-count { font-size: 13px; color: #7A8DA8; margin-top: 2px; }
   .list-card .l-go { font-size: 22px; color: #B9CCE0; }
+
   .add-list {
-    width: 100%; border: 3px dashed #9DBEDB; background: #fff; border-radius: 20px;
-    padding: 16px; font-size: 18px; font-weight: bold; font-family: inherit;
-    color: var(--blue); cursor: pointer; margin-top: 4px;
+    width: 100%;
+    border: 3px dashed #9DBEDB;
+    background: #fff;
+    border-radius: 20px;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: inherit;
+    color: #5BA8E5;
+    cursor: pointer;
+    margin-top: 4px;
   }
   .add-list:active { transform: translateY(2px); }
 
+  /* ===== 清單選單（進入某份清單後）===== */
   .mode-btn {
-    width: 100%; border: none; border-radius: 22px; padding: 22px; font-size: 22px;
-    font-weight: bold; font-family: inherit; color: #fff; cursor: pointer; margin-bottom: 14px;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.12); transition: transform .1s;
+    width: 100%;
+    border: none;
+    border-radius: 22px;
+    padding: 22px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: inherit;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+    transition: transform .1s;
   }
   .mode-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
   #goBtn   { background: var(--coral); }
-  #homeBtn { background: var(--blue); }
-  .resume { display: block; font-size: 13px; font-weight: normal; margin-top: 6px; opacity: .95; }
+  #homeBtn { background: #5BA8E5; }
+  .resume {
+    display: block;
+    font-size: 13px;
+    font-weight: normal;
+    margin-top: 6px;
+    opacity: .95;
+  }
   .edit-entry {
-    width: 100%; background: #fff; border: 3px solid var(--star); color: var(--ink);
-    border-radius: 18px; padding: 14px; font-size: 17px; font-weight: bold; font-family: inherit;
-    cursor: pointer; margin-top: 6px;
+    width: 100%;
+    background: #fff;
+    border: 3px solid var(--star);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 6px;
   }
   .edit-entry:active { transform: translateY(2px); }
 
+  /* ===== 核對畫面 ===== */
   .mode-tag {
-    display: inline-block; background: var(--soft); border-radius: 999px; padding: 6px 16px;
-    font-size: 15px; font-weight: bold; margin-bottom: 8px;
+    display: inline-block;
+    background: var(--soft);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 8px;
   }
   .progress { font-size: 16px; margin-bottom: 18px; letter-spacing: 4px; min-height: 20px; }
+
   .item {
-    display: flex; align-items: center; gap: 14px; background: var(--soft);
-    border: 3px solid transparent; border-radius: 18px; padding: 14px 16px; margin-bottom: 12px;
-    cursor: pointer; user-select: none; transition: background .15s, border-color .15s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--soft);
+    border: 3px solid transparent;
+    border-radius: 18px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s, border-color .15s;
   }
   .item .emoji { font-size: 30px; }
   .item .name  { font-size: 19px; font-weight: bold; flex: 1; text-align: left; }
   .item .box {
-    width: 32px; height: 32px; border-radius: 10px; border: 3px solid #B9CCE0;
-    background: #fff; font-size: 20px; line-height: 26px; color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    border: 3px solid #B9CCE0;
+    background: #fff;
+    font-size: 20px;
+    line-height: 26px;
+    color: #fff;
   }
   .item.checked { background: #E6F7EC; border-color: var(--leaf); }
   .item.checked .box { background: var(--leaf); border-color: var(--leaf); }
@@ -196,761 +171,453 @@
     40%  { transform: scale(1.4) rotate(-8deg); }
     100% { transform: scale(1); }
   }
+
   .empty-hint {
-    background: var(--soft); border-radius: 18px; padding: 28px 16px; color: #7A8DA8;
-    font-size: 16px; margin-bottom: 12px; line-height: 1.6;
+    background: var(--soft);
+    border-radius: 18px;
+    padding: 28px 16px;
+    color: #7A8DA8;
+    font-size: 16px;
+    margin-bottom: 12px;
+    line-height: 1.6;
   }
+
   .back {
-    background: none; border: none; color: #7A8DA8; font-size: 14px; font-family: inherit;
-    cursor: pointer; margin-top: 10px; text-decoration: underline;
+    background: none;
+    border: none;
+    color: #7A8DA8;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: underline;
   }
+
+  /* ===== 整理清單畫面 ===== */
   .edit-item {
-    display: flex; align-items: center; gap: 12px; background: var(--soft);
-    border-radius: 16px; padding: 12px 14px; margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--soft);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
   }
   .edit-item .e-emoji { font-size: 28px; }
   .edit-item .e-name { font-size: 18px; font-weight: bold; flex: 1; text-align: left; }
   .del-btn {
-    border: none; background: var(--pink); color: #fff; width: 38px; height: 38px;
-    border-radius: 12px; font-size: 20px; cursor: pointer; flex-shrink: 0; font-family: inherit;
+    border: none;
+    background: var(--pink);
+    color: #fff;
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
   }
   .del-btn:active { transform: translateY(2px); }
-  .add-row { display: flex; gap: 10px; margin: 16px 0 8px; }
-  .name-input2 {
-    flex: 1; border: 3px solid #CDE3F5; border-radius: 14px; padding: 12px 14px;
-    font-size: 18px; font-family: inherit; color: var(--ink); min-width: 0;
+
+  .add-row {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 8px;
   }
-  .name-input2:focus { outline: none; border-color: var(--blue); }
+  .name-input {
+    flex: 1;
+    border: 3px solid #CDE3F5;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 18px;
+    font-family: inherit;
+    color: var(--ink);
+    min-width: 0;
+  }
+  .name-input:focus { outline: none; border-color: #5BA8E5; }
   .add-confirm {
-    background: var(--leaf); color: #fff; border: none; border-radius: 14px; padding: 0 22px;
-    font-size: 18px; font-weight: bold; font-family: inherit; cursor: pointer;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.12); flex-shrink: 0;
+    background: var(--leaf);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 0 22px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    flex-shrink: 0;
   }
   .add-confirm:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
+
   .delete-list-link {
-    background: none; border: none; color: var(--pink); font-size: 14px; font-family: inherit;
-    cursor: pointer; margin-top: 4px; text-decoration: underline; display: block; width: 100%;
+    background: none;
+    border: none;
+    color: var(--pink);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 4px;
+    text-decoration: underline;
+    display: block;
+    width: 100%;
   }
-  .done-char { height: 130px; width: auto; margin-bottom: 6px; }
-  #doneTitle { margin-top: 6px; }
+
+  /* ===== 完成畫面 ===== */
+  .big-emoji { font-size: 64px; animation: party .6s ease; }
+  @keyframes party {
+    0%   { transform: scale(0) rotate(-30deg); }
+    70%  { transform: scale(1.2) rotate(8deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+  #doneTitle { margin-top: 10px; }
   #doneTime { color: #7A8DA8; font-size: 14px; margin: 10px 0 24px; }
   .stars { font-size: 26px; letter-spacing: 6px; margin-bottom: 8px; }
   #homeReturnBtn {
-    background: var(--star); color: var(--ink); border: none; border-radius: 22px;
-    padding: 16px 36px; font-size: 19px; font-weight: bold; font-family: inherit;
-    cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+    background: var(--star);
+    color: var(--ink);
+    border: none;
+    border-radius: 22px;
+    padding: 16px 36px;
+    font-size: 19px;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
   }
   #homeReturnBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
-
-  .settings-section { text-align: left; margin-bottom: 18px; }
-  .settings-section h3 { font-size: 16px; margin-bottom: 8px; color: var(--ink); }
-  .set-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
 </style>
 </head>
 <body>
 
-<!-- ============ 設定流程 ============ -->
-
-<!-- S1 語言頁 -->
-<div class="screen" id="scLang">
-  <div class="dots" data-step="0"></div>
-  <h1>🐯🐰</h1>
-  <div class="lang-wrap">
-    <button class="lang-btn" id="langBtn" aria-label="select language">
-      <span class="lang-globe">🌐</span><span id="langArrow">▾</span>
-    </button>
-    <div class="lang-finger" id="langFinger">👆</div>
-    <div class="lang-menu" id="langMenu"></div>
-  </div>
-</div>
-
-<!-- S2 角色頁 -->
-<div class="screen" id="scChar">
-  <div class="dots" data-step="1"></div>
-  <h1 id="charTitle"></h1>
-  <div class="pick-row">
-    <button class="pick-card" id="pickAwei">
-      <img src="awei_smile.png" alt="阿威">
-      <div class="pick-name">阿威</div>
-    </button>
-    <button class="pick-card" id="pickXiaoqing">
-      <img src="xiaoqing_smile.png" alt="小晴">
-      <div class="pick-name">小晴</div>
-    </button>
-  </div>
-  <button class="big-btn leaf disabled" id="charConfirm" disabled></button>
-</div>
-
-<!-- S3 名字頁 -->
-<div class="screen" id="scName">
-  <div class="dots" data-step="2"></div>
-  <div class="char-wrap">
-    <img class="char-img" id="nameChar" src="" alt="">
-    <div class="bubble" id="nameBubble"></div>
-  </div>
-  <input class="name-input" id="nameInput" maxlength="12" placeholder="">
-  <button class="big-btn leaf" id="nameNext"></button>
-</div>
-
-<!-- S4 性別頁 -->
-<div class="screen" id="scGender">
-  <div class="dots" data-step="3"></div>
-  <div class="char-wrap">
-    <img class="char-img" id="genderChar" src="" alt="">
-    <div class="bubble" id="genderBubble"></div>
-  </div>
-  <div class="gender-row">
-    <button class="gender-btn" id="gBoy"><span class="g-emoji">👦</span><span id="gBoyLabel"></span></button>
-    <button class="gender-btn" id="gGirl"><span class="g-emoji">👧</span><span id="gGirlLabel"></span></button>
-  </div>
-  <button class="big-btn leaf disabled" id="genderNext" disabled></button>
-</div>
-
-<!-- ============ 主程式畫面 ============ -->
-
-<!-- 選清單（首頁）-->
-<div class="screen" id="screenHome">
-  <button class="settings-btn" id="openSettings">⚙️</button>
-  <h1 id="homeTitle">🐻 帶好了嗎？</h1>
-  <p class="sub" id="homeSub"></p>
+<!-- 畫面一：選清單（首頁）-->
+<div class="screen active" id="screenHome">
+  <h1>🐻 帶好了嗎？</h1>
+  <p class="sub">選一份清單，或做一份新的！</p>
   <div id="listCards"></div>
-  <button class="add-list" id="addListBtn"></button>
+  <button class="add-list" id="addListBtn">➕ 做一份新清單</button>
 </div>
 
-<!-- 清單選單 -->
+<!-- 畫面二：清單選單（出門／回家／整理）-->
 <div class="screen" id="screenList">
   <h1 id="listTitle"></h1>
-  <p class="sub" id="listSub"></p>
-  <button class="mode-btn" id="goBtn"><span id="goLabel"></span><span class="resume" id="goResume"></span></button>
-  <button class="mode-btn" id="homeBtn"><span id="homeLabel"></span><span class="resume" id="homeResume"></span></button>
-  <button class="edit-entry" id="editEntryBtn"></button>
-  <button class="back" id="listBackBtn"></button>
+  <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
+  <button class="mode-btn" id="goBtn">
+    🎒 我要出門了！
+    <span class="resume" id="goResume"></span>
+  </button>
+  <button class="mode-btn" id="homeBtn">
+    🏠 我要回家啦！
+    <span class="resume" id="homeResume"></span>
+  </button>
+  <button class="edit-entry" id="editEntryBtn">✏️ 整理這份清單</button>
+  <button class="back" id="listBackBtn">← 回去選別份清單</button>
 </div>
 
-<!-- 核對清單 -->
+<!-- 畫面三：核對清單 -->
 <div class="screen" id="screenCheck">
   <span class="mode-tag" id="modeTag"></span>
   <p class="progress" id="progress"></p>
   <div id="itemList"></div>
-  <button class="back" id="backBtn"></button>
+  <button class="back" id="backBtn">← 先回去（進度會記住喔）</button>
 </div>
 
-<!-- 整理清單 -->
+<!-- 畫面四：整理清單 -->
 <div class="screen" id="screenEdit">
-  <h1 id="editTitle"></h1>
-  <p class="sub" id="editSub"></p>
+  <h1 id="editTitle">✏️ 整理清單</h1>
+  <p class="sub">固定要帶的留著就好，這次多帶的隨時加，不用了再刪！</p>
   <div id="editList"></div>
   <div class="add-row">
-    <input class="name-input2" id="newItemName" maxlength="10" placeholder="">
-    <button class="add-confirm" id="addItemBtn"></button>
+    <input class="name-input" id="newItemName" placeholder="例如：水壺" maxlength="10">
+    <button class="add-confirm" id="addItemBtn">加進去</button>
   </div>
-  <button class="back" id="editBackBtn"></button>
-  <button class="delete-list-link" id="deleteListBtn"></button>
+  <button class="back" id="editBackBtn">← 整理好了，回去</button>
+  <button class="delete-list-link" id="deleteListBtn">🗑️ 刪掉整份清單</button>
 </div>
 
-<!-- 完成 -->
+<!-- 畫面五：完成 -->
 <div class="screen" id="screenDone">
-  <img class="done-char" id="doneChar" src="" alt="">
+  <div class="big-emoji" id="doneEmoji">🎉</div>
   <div class="stars">⭐⭐⭐⭐⭐</div>
   <h1 id="doneTitle"></h1>
   <p id="doneTime"></p>
-  <button id="homeReturnBtn"></button>
-</div>
-
-<!-- 設定頁 -->
-<div class="screen" id="screenSettings">
-  <h1 id="setTitle"></h1>
-  <div class="settings-section">
-    <h3 id="setLangTitle"></h3>
-    <div class="set-row"><select class="loc-input" id="setLangSelect" style="margin:0;"></select></div>
-    <h3 id="setCharTitle"></h3>
-    <div class="set-row">
-      <button class="gender-btn" id="setAwei" style="padding:10px;"><img src="awei_smile.png" style="height:60px;"><div>阿威</div></button>
-      <button class="gender-btn" id="setXiaoqing" style="padding:10px;"><img src="xiaoqing_smile.png" style="height:60px;"><div>小晴</div></button>
-    </div>
-    <h3 id="setNameTitle"></h3>
-    <input class="loc-input" id="setNameInput" maxlength="12" style="text-align:left;">
-    <h3 id="setGenderTitle"></h3>
-    <div class="gender-row">
-      <button class="gender-btn" id="setBoy" style="padding:12px;"><span class="g-emoji">👦</span><span id="setBoyLabel"></span></button>
-      <button class="gender-btn" id="setGirl" style="padding:12px;"><span class="g-emoji">👧</span><span id="setGirlLabel"></span></button>
-    </div>
-  </div>
-  <button class="big-btn leaf" id="setSave"></button>
-  <button class="back" id="setBack"></button>
+  <button id="homeReturnBtn">回去</button>
 </div>
 
 <script>
-  var $ = function(id){ return document.getElementById(id); };
+  // ── 可愛動物裝飾圖（與物品內容無關，只是讓畫面可愛）──
+  const ANIMALS = ["🐻","🐰","🐱","🐶","🦊","🐧","🐸","🐥","🐼","🐨","🐯","🦁","🐮","🐷","🐵","🦉"];
 
-  var CHAR_IMG = {
-    awei:     { smile:"awei_smile.png",     think:"awei_think.png",     happy:"awei_happy.png" },
-    xiaoqing: { smile:"xiaoqing_smile.png", think:"xiaoqing_think.png", happy:"xiaoqing_happy.png" }
+  const MODE_INFO = {
+    outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀" },
+    inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
 
-  var LANGS = [
-    { code:"zh", label:"繁體中文" },
-    { code:"en", label:"English" }
-  ];
+  // ── localStorage：一筆，裡面裝所有清單 ──
+  // data = { lists: [ { id, name, items:[{name,animal}], progress:{outbound:{byName},inbound:{byName}} } ] }
+  const DATA_KEY = "checklist_data";
 
-  var UI = {
-    zh: {
-      charTitle:"選一個夥伴，陪你一起準備！",
-      charConfirm:"就決定是你了！",
-      namePh:"打上你的名字",
-      nameNext:"好了",
-      gBoy:"男生", gGirl:"女生", genderNext:"下一步",
-      homeSub:"選一份清單，或做一份新的！",
-      addList:"➕ 做一份新清單",
-      listSub:"出門前、回家前，勾勾看東西都在嗎！",
-      goLabel:"🎒 我要出門了！", homeLabel:"🏠 我要回家啦！",
-      editEntry:"✏️ 整理這份清單", listBack:"← 回去選別份清單",
-      back:"← 先回去（進度會記住喔）",
-      editTitlePre:"✏️ 整理「", editTitleSuf:"」",
-      editSub:"固定要帶的留著就好，這次多帶的隨時加，不用了再刪！",
-      newItemPh:"例如：水壺", addItem:"加進去",
-      editBack:"← 整理好了，回去", deleteList:"🗑️ 刪掉整份清單",
-      homeReturn:"回去",
-      emptyHome:"還沒有清單喔！<br>按下面做一份新的吧 🐰",
-      emptyCheck:"這份清單還沒有東西耶！<br>先回去按「整理這份清單」加東西吧 🐰",
-      emptyEdit:"清單是空的，下面打名字加東西吧！",
-      resume:function(n,t){ return "已經勾了 "+n+"／"+t+" 樣，繼續吧！"; },
-      count:function(n){ return n+" 樣東西"; },
-      promptListName:"這份清單要叫什麼名字？\n（例如：禮拜一、去打球）",
-      confirmDelItem:function(n){ return "要把「"+n+"」刪掉嗎？"; },
-      confirmDelList:function(n){ return "要刪掉整份「"+n+"」清單嗎？\n裡面的東西都會一起不見喔。"; },
-      tagOut:"🎒 出門檢查", tagIn:"🏠 回家檢查",
-      doneOut:"全部帶齊，出發囉！", doneIn:"全部帶上了，好棒！",
-      doneTime:function(h,m){ return "完成時間 "+h+":"+m; },
-      setTitle:"⚙️ 設定", setLang:"語言", setChar:"夥伴", setName:"名字",
-      setGender:"性別", setSave:"存好了", setBack:"← 回去"
-    },
-    en: {
-      charTitle:"Pick a partner to get ready with you!",
-      charConfirm:"It's you!",
-      namePh:"Type your name",
-      nameNext:"Done",
-      gBoy:"Boy", gGirl:"Girl", genderNext:"Next",
-      homeSub:"Pick a list, or make a new one!",
-      addList:"➕ Make a new list",
-      listSub:"Before you go out or come home, check everything's here!",
-      goLabel:"🎒 I'm going out!", homeLabel:"🏠 I'm going home!",
-      editEntry:"✏️ Edit this list", listBack:"← Back to lists",
-      back:"← Back (your progress is saved)",
-      editTitlePre:"✏️ Edit \"", editTitleSuf:"\"",
-      editSub:"Keep what you always bring, add extras anytime, remove what you don't need!",
-      newItemPh:"e.g. Water bottle", addItem:"Add",
-      editBack:"← All set, go back", deleteList:"🗑️ Delete whole list",
-      homeReturn:"Back",
-      emptyHome:"No lists yet!<br>Tap below to make one 🐰",
-      emptyCheck:"This list is empty!<br>Go back and tap \"Edit this list\" to add things 🐰",
-      emptyEdit:"The list is empty. Type a name below to add things!",
-      resume:function(n,t){ return "Checked "+n+"/"+t+" already, keep going!"; },
-      count:function(n){ return n+" things"; },
-      promptListName:"What's this list called?\n(e.g. Monday, Soccer)",
-      confirmDelItem:function(n){ return "Remove \""+n+"\"?"; },
-      confirmDelList:function(n){ return "Delete the whole \""+n+"\" list?\nEverything in it will be gone."; },
-      tagOut:"🎒 Going out", tagIn:"🏠 Coming home",
-      doneOut:"All packed, let's go!", doneIn:"All brought back, great job!",
-      doneTime:function(h,m){ return "Finished at "+h+":"+m; },
-      setTitle:"⚙️ Settings", setLang:"Language", setChar:"Partner", setName:"Name",
-      setGender:"Gender", setSave:"Save", setBack:"← Back"
-    }
-  };
+  let data = { lists: [] };
+  let currentListId = null;   // 目前選中的清單
+  let mode = null;            // "outbound" / "inbound"
+  let checked = [];           // 與目前清單 items 等長
 
-  var VOICE = {
-    choose_partner: {
-      awei:{ zh:"你好！我是阿威，我來陪你準備喔！", en:"Hi! I'm Leo. I'll get ready with you!" },
-      xiaoqing:{ zh:"你好呀～小寶貝，我是小晴，我們一起準備好不好？", en:"Hi there, sweetie! I'm Sunny. Let's get ready together, okay?" }
-    },
-    ask_name: {
-      awei:{ zh:"你叫什麼名字呀？", en:"What's your name?" },
-      xiaoqing:{ zh:"可以告訴我，你叫什麼名字嗎？", en:"Can you tell me your name?" }
-    },
-    ask_gender: {
-      awei:{ zh:"○○你好！你是男生，還是女生呢？", en:"Hi, ○○! Are you a boy or a girl?" },
-      xiaoqing:{ zh:"○○你好呀～你是男生，還是女生呢？", en:"Hi, ○○! Are you a boy or a girl?" }
-    },
-    checklist_enter: {
-      awei:{ zh:"我們一起來看看，東西都帶了嗎？", en:"Let's check together. Do you have everything?" },
-      xiaoqing:{ zh:"我們慢慢看，一樣一樣來，好嗎？", en:"Let's look slowly, one by one, okay?" }
-    },
-    item_checked: {
-      awei:{ zh:"{物品}，帶好了！", en:"{物品}, all set!" },
-      xiaoqing:{ zh:"{物品}，帶好了～", en:"{物品}, all set~" }
-    },
-    all_checked: {
-      awei:{ zh:"○○好棒！東西都帶好了，出發吧！", en:"Great job, ○○! You packed everything. Let's go!" },
-      xiaoqing:{ zh:"○○好厲害～小寶貝，東西都準備好了，我們出發囉！", en:"Wow, ○○, amazing! Everything is ready, sweetie. Let's go together!" }
-    }
-  };
+  const $ = (id) => document.getElementById(id);
 
-  var DATA_KEY = "checklist_data";
-  var PROFILE_KEY = "checklist_profile";
-  var data = { lists: [] };
-  var profile = null;
-  var currentListId = null;
-  var mode = null;
-  var checked = [];
-  var ANIMALS = ["🐻","🐰","🐱","🐶","🦊","🐧","🐸","🐥","🐼","🐨","🐯","🦁","🐮","🐷","🐵","🦉"];
-  var MODE_INFO = { outbound:{}, inbound:{} };
-
-  function L(){ return UI[(profile && profile.lang) || "zh"]; }
-  function lang(){ return (profile && profile.lang) || "zh"; }
-  function chr(){ return (profile && profile.char) || "awei"; }
-
-  var voicesReady = false;
-  function loadVoices(){ try { window.speechSynthesis.getVoices(); voicesReady = true; } catch(e){} }
-  if (window.speechSynthesis){
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-  }
-  function pickVoice(lc){
-    if (!window.speechSynthesis) return null;
-    var vs = window.speechSynthesis.getVoices() || [];
-    var want = lc === "zh" ? ["zh-TW","zh-HK","zh-CN","zh"] : ["en-US","en-GB","en"];
-    for (var i=0;i<want.length;i++){
-      for (var j=0;j<vs.length;j++){
-        if (vs[j].lang && vs[j].lang.toLowerCase().indexOf(want[i].toLowerCase())===0) return vs[j];
-      }
-    }
-    return null;
-  }
-  function speakKey(key, opts){
-    if (!window.speechSynthesis) return;
-    var node = VOICE[key]; if(!node) return;
-    var byChar = node[chr()]; if(!byChar) return;
-    var text = byChar[lang()] || byChar.zh; if(!text) return;
-    opts = opts || {};
-    if (profile && profile.name) text = text.replace(/○○/g, profile.name);
-    if (opts.item) text = text.replace(/\{物品\}/g, opts.item);
+  // ── 資料讀寫 ──
+  function loadData() {
     try {
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text);
-      var v = pickVoice(lang());
-      if (v) u.voice = v;
-      u.lang = lang()==="zh" ? "zh-TW" : "en-US";
-      u.rate = 0.95;
-      window.speechSynthesis.speak(u);
-    } catch(e){}
-  }
-  function voiceText(key){
-    var node = VOICE[key]; if(!node) return "";
-    var byChar = node[chr()]; if(!byChar) return "";
-    var text = byChar[lang()] || byChar.zh;
-    if (profile && profile.name) text = text.replace(/○○/g, profile.name);
-    return text;
-  }
-
-  function loadData(){
-    try {
-      var raw = localStorage.getItem(DATA_KEY);
+      const raw = localStorage.getItem(DATA_KEY);
       if (!raw) return { lists: [] };
-      var d = JSON.parse(raw);
-      return (d && d.lists && d.lists.length !== undefined) ? d : { lists: [] };
-    } catch(e){ return { lists: [] }; }
+      const d = JSON.parse(raw);
+      return (d && Array.isArray(d.lists)) ? d : { lists: [] };
+    } catch (e) { return { lists: [] }; }
   }
-  function saveData(){ localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
-  function loadProfile(){
-    try { var raw = localStorage.getItem(PROFILE_KEY); return raw ? JSON.parse(raw) : null; }
-    catch(e){ return null; }
-  }
-  function saveProfile(){ localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }
-  function uid(){ return "L"+Date.now()+Math.random().toString(36).slice(2,6); }
-  function getList(id){ for(var i=0;i<data.lists.length;i++){ if(data.lists[i].id===id) return data.lists[i]; } return null; }
-  function escapeHtml(s){
-    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-  }
-  function pickAnimal(list){
-    var count={}; ANIMALS.forEach(function(a){count[a]=0;});
-    list.items.forEach(function(it){ if(count[it.animal]!==undefined) count[it.animal]++; });
-    var best=ANIMALS[0], min=Infinity;
-    ANIMALS.forEach(function(a){ if(count[a]<min){min=count[a];best=a;} });
+  function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
+  function uid() { return "L" + Date.now() + Math.random().toString(36).slice(2, 6); }
+  function getList(id) { return data.lists.find(l => l.id === id); }
+
+  function pickAnimal(list) {
+    const count = {};
+    ANIMALS.forEach(a => count[a] = 0);
+    list.items.forEach(it => { if (count[it.animal] !== undefined) count[it.animal]++; });
+    let best = ANIMALS[0], min = Infinity;
+    ANIMALS.forEach(a => { if (count[a] < min) { min = count[a]; best = a; } });
     return best;
   }
-  function getChecked(list,m){
-    var byName=(list.progress&&list.progress[m]&&list.progress[m].byName)||{};
-    return list.items.map(function(it){ return !!byName[it.name]; });
+
+  // 進度依物品名稱記，增刪物品不會弄亂已勾的
+  function getChecked(list, m) {
+    const byName = (list.progress && list.progress[m] && list.progress[m].byName) || {};
+    return list.items.map(it => !!byName[it.name]);
   }
-  function saveChecked(list,m,arr){
-    if(!list.progress) list.progress={outbound:{byName:{}},inbound:{byName:{}}};
-    var byName={}; list.items.forEach(function(it,i){ byName[it.name]=!!arr[i]; });
-    list.progress[m]={byName:byName}; saveData();
+  function saveChecked(list, m, arr) {
+    if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
+    const byName = {};
+    list.items.forEach((it, i) => { byName[it.name] = !!arr[i]; });
+    list.progress[m] = { byName };
+    saveData();
   }
-  function clearChecked(list,m){
-    if(!list.progress) list.progress={outbound:{byName:{}},inbound:{byName:{}}};
-    list.progress[m]={byName:{}}; saveData();
+  function clearChecked(list, m) {
+    if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
+    list.progress[m] = { byName: {} };
+    saveData();
   }
 
-  function show(id){
-    var ss=document.querySelectorAll(".screen");
-    for(var i=0;i<ss.length;i++) ss[i].classList.remove("active");
+  function show(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
   }
-  function renderDots(){
-    var ds=document.querySelectorAll(".dots");
-    for(var k=0;k<ds.length;k++){
-      var step=parseInt(ds[k].getAttribute("data-step"),10);
-      ds[k].innerHTML="";
-      for(var i=0;i<4;i++){
-        var d=document.createElement("span");
-        d.className="dot"+(i<=step?" on":"");
-        ds[k].appendChild(d);
-      }
-    }
-  }
 
-  var draft = {};
+  // ── 首頁：列出所有清單 ──
+  function renderHome() {
+    data = loadData();
+    currentListId = null;
+    const wrap = $("listCards");
+    wrap.innerHTML = "";
 
-  function startOnboarding(){
-    draft = { lang:"zh", char:null, name:"", gender:null };
-    renderDots();
-    buildLangMenu();
-    show("scLang");
-  }
-
-  function buildLangMenu(){
-    var menu=$("langMenu"); menu.innerHTML="";
-    LANGS.forEach(function(l){
-      var b=document.createElement("button");
-      b.textContent=l.label;
-      b.onclick=function(){
-        draft.lang=l.code;
-        $("langMenu").style.display="none";
-        $("langFinger").style.display="none";
-        gotoCharPage();
-      };
-      menu.appendChild(b);
-    });
-  }
-  $("langBtn").onclick=function(){
-    var m=$("langMenu");
-    m.style.display = m.style.display==="block" ? "none":"block";
-  };
-
-  function tt(code){ return UI[draft.lang||"zh"][code]; }
-
-  function gotoCharPage(){
-    renderDots();
-    $("charTitle").textContent = tt("charTitle");
-    $("charConfirm").textContent = tt("charConfirm");
-    $("pickAwei").classList.remove("sel","dim");
-    $("pickXiaoqing").classList.remove("sel","dim");
-    $("charConfirm").classList.add("disabled"); $("charConfirm").disabled=true;
-    draft.char=null;
-    show("scChar");
-  }
-  function pickChar(which){
-    draft.char=which;
-    $("pickAwei").classList.toggle("sel", which==="awei");
-    $("pickAwei").classList.toggle("dim", which!=="awei");
-    $("pickXiaoqing").classList.toggle("sel", which==="xiaoqing");
-    $("pickXiaoqing").classList.toggle("dim", which!=="xiaoqing");
-    $("charConfirm").classList.remove("disabled"); $("charConfirm").disabled=false;
-    profile = profile || {};
-    var saved = { lang:profile.lang, char:profile.char, name:profile.name };
-    profile.lang=draft.lang; profile.char=draft.char; profile.name=draft.name;
-    speakKey("choose_partner");
-    profile.lang=saved.lang; profile.char=saved.char; profile.name=saved.name;
-  }
-  $("pickAwei").onclick=function(){ pickChar("awei"); };
-  $("pickXiaoqing").onclick=function(){ pickChar("xiaoqing"); };
-  $("charConfirm").onclick=function(){ if(draft.char) gotoNamePage(); };
-
-  function tempProfile(extra){
-    var p={ lang:draft.lang, char:draft.char, name:draft.name||"", gender:draft.gender };
-    if(extra) for(var k in extra) p[k]=extra[k];
-    return p;
-  }
-
-  function gotoNamePage(){
-    renderDots();
-    $("nameChar").src = CHAR_IMG[draft.char].smile;
-    var prev=profile; profile=tempProfile();
-    $("nameBubble").textContent = voiceText("ask_name");
-    $("nameInput").placeholder = tt("namePh");
-    $("nameNext").textContent = tt("nameNext");
-    $("nameInput").value = draft.name||"";
-    speakKey("ask_name");
-    profile=prev;
-    show("scName");
-    setTimeout(function(){ $("nameInput").focus(); },200);
-  }
-  $("nameNext").onclick=function(){
-    var v=$("nameInput").value.trim();
-    if(!v){ $("nameInput").focus(); return; }
-    draft.name=v.slice(0,12);
-    gotoGenderPage();
-  };
-  $("nameInput").addEventListener("keydown",function(e){ if(e.key==="Enter") $("nameNext").click(); });
-
-  function gotoGenderPage(){
-    renderDots();
-    $("genderChar").src = CHAR_IMG[draft.char].smile;
-    var prev=profile; profile=tempProfile();
-    $("genderBubble").textContent = voiceText("ask_gender");
-    speakKey("ask_gender");
-    profile=prev;
-    $("gBoyLabel").textContent = tt("gBoy");
-    $("gGirlLabel").textContent = tt("gGirl");
-    $("genderNext").textContent = tt("genderNext");
-    $("gBoy").classList.remove("sel"); $("gGirl").classList.remove("sel");
-    $("genderNext").classList.add("disabled"); $("genderNext").disabled=true;
-    draft.gender=null;
-    show("scGender");
-  }
-  function pickGender(g){
-    draft.gender=g;
-    $("gBoy").classList.toggle("sel", g==="boy");
-    $("gGirl").classList.toggle("sel", g==="girl");
-    $("genderNext").classList.remove("disabled"); $("genderNext").disabled=false;
-  }
-  $("gBoy").onclick=function(){ pickGender("boy"); };
-  $("gGirl").onclick=function(){ pickGender("girl"); };
-  $("genderNext").onclick=function(){ if(draft.gender) finishOnboarding(); };
-
-  function finishOnboarding(){
-    profile = { lang:draft.lang, char:draft.char, name:draft.name, gender:draft.gender };
-    saveProfile();
-    enterHome();
-  }
-
-  function enterHome(){
-    data=loadData();
-    MODE_INFO.outbound={ tag:L().tagOut, doneTitle:L().doneOut, doneImg:CHAR_IMG[chr()].happy };
-    MODE_INFO.inbound ={ tag:L().tagIn,  doneTitle:L().doneIn,  doneImg:CHAR_IMG[chr()].happy };
-    renderHome();
-  }
-
-  function renderHome(){
-    data=loadData();
-    currentListId=null;
-    $("homeSub").textContent=L().homeSub;
-    $("addListBtn").textContent=L().addList;
-    var wrap=$("listCards"); wrap.innerHTML="";
-    if(data.lists.length===0){
-      var hint=document.createElement("div");
-      hint.className="empty-hint"; hint.innerHTML=L().emptyHome;
+    if (data.lists.length === 0) {
+      const hint = document.createElement("div");
+      hint.className = "empty-hint";
+      hint.innerHTML = "還沒有清單喔！<br>按下面做一份新的吧 🐰";
       wrap.appendChild(hint);
     } else {
-      data.lists.forEach(function(list){
-        var emoji=list.items.length>0?list.items[0].animal:"📋";
-        var card=document.createElement("button");
-        card.className="list-card";
-        card.innerHTML='<span class="l-emoji">'+emoji+'</span>'
-          +'<span class="l-info"><span class="l-name">'+escapeHtml(list.name)+'</span>'
-          +'<span class="l-count">'+L().count(list.items.length)+'</span></span>'
-          +'<span class="l-go">›</span>';
-        card.onclick=function(){ openList(list.id); };
+      data.lists.forEach(list => {
+        const emoji = list.items.length > 0 ? list.items[0].animal : "📋";
+        const card = document.createElement("button");
+        card.className = "list-card";
+        card.innerHTML = `
+          <span class="l-emoji">${emoji}</span>
+          <span class="l-info">
+            <span class="l-name">${escapeHtml(list.name)}</span>
+            <span class="l-count">${list.items.length} 樣東西</span>
+          </span>
+          <span class="l-go">›</span>`;
+        card.onclick = () => openList(list.id);
         wrap.appendChild(card);
       });
     }
     show("screenHome");
   }
 
-  function addList(){
-    var name=(prompt(L().promptListName)||"").trim();
-    if(!name) return;
-    data.lists.push({ id:uid(), name:name.slice(0,12), items:[],
-      progress:{outbound:{byName:{}},inbound:{byName:{}}} });
-    saveData(); renderHome();
+  function addList() {
+    const name = (prompt("這份清單要叫什麼名字？\n（例如：禮拜一、去打球）") || "").trim();
+    if (!name) return;
+    data.lists.push({
+      id: uid(),
+      name: name.slice(0, 12),
+      items: [],
+      progress: { outbound: { byName: {} }, inbound: { byName: {} } }
+    });
+    saveData();
+    renderHome();
   }
 
-  function openList(id){
-    data=loadData();
-    var list=getList(id);
-    if(!list){ renderHome(); return; }
-    currentListId=id;
-    $("listTitle").textContent=list.name;
-    $("listSub").textContent=L().listSub;
-    $("goLabel").textContent=L().goLabel;
-    $("homeLabel").textContent=L().homeLabel;
-    $("editEntryBtn").textContent=L().editEntry;
-    $("listBackBtn").textContent=L().listBack;
-    var go=getChecked(list,"outbound").filter(Boolean).length;
-    var back=getChecked(list,"inbound").filter(Boolean).length;
-    var n=list.items.length;
-    $("goResume").textContent   = go>0   ? L().resume(go,n)   : "";
-    $("homeResume").textContent = back>0 ? L().resume(back,n) : "";
+  // ── 清單選單 ──
+  function openList(id) {
+    data = loadData();
+    const list = getList(id);
+    if (!list) { renderHome(); return; }
+    currentListId = id;
+    $("listTitle").textContent = list.name;
+    const go = getChecked(list, "outbound").filter(Boolean).length;
+    const back = getChecked(list, "inbound").filter(Boolean).length;
+    const n = list.items.length;
+    $("goResume").textContent   = go   > 0 ? `已經勾了 ${go}／${n} 樣，繼續吧！` : "";
+    $("homeResume").textContent = back > 0 ? `已經勾了 ${back}／${n} 樣，繼續吧！` : "";
     show("screenList");
   }
 
-  function startCheck(m){
-    data=loadData();
-    var list=getList(currentListId);
-    if(!list){ renderHome(); return; }
-    mode=m; checked=getChecked(list,m);
+  // ── 核對畫面 ──
+  function startCheck(m) {
+    data = loadData();
+    const list = getList(currentListId);
+    if (!list) { renderHome(); return; }
+    mode = m;
+    checked = getChecked(list, m);
     renderCheck();
     show("screenCheck");
-    speakKey("checklist_enter");
   }
-  function renderCheck(){
-    var list=getList(currentListId);
-    $("modeTag").textContent=MODE_INFO[mode].tag;
-    $("backBtn").textContent=L().back;
-    var wrap=$("itemList"); wrap.innerHTML="";
-    if(list.items.length===0){
-      $("progress").textContent="";
-      var hint=document.createElement("div");
-      hint.className="empty-hint"; hint.innerHTML=L().emptyCheck;
-      wrap.appendChild(hint); return;
+
+  function renderCheck() {
+    const list = getList(currentListId);
+    $("modeTag").textContent = MODE_INFO[mode].tag;
+    const wrap = $("itemList");
+    wrap.innerHTML = "";
+
+    if (list.items.length === 0) {
+      $("progress").textContent = "";
+      const hint = document.createElement("div");
+      hint.className = "empty-hint";
+      hint.innerHTML = "這份清單還沒有東西耶！<br>先回去按「整理這份清單」加東西吧 🐰";
+      wrap.appendChild(hint);
+      return;
     }
-    $("progress").textContent=checked.map(function(c){return c?"⭐":"☆";}).join("");
-    list.items.forEach(function(item,i){
-      var div=document.createElement("div");
-      div.className="item"+(checked[i]?" checked":"");
-      div.innerHTML='<span class="emoji">'+item.animal+'</span>'
-        +'<span class="name">'+escapeHtml(item.name)+'</span>'
-        +'<span class="box">'+(checked[i]?"✓":"")+'</span>';
-      div.onclick=function(){ toggleItem(i); };
+
+    $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
+    list.items.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "item" + (checked[i] ? " checked" : "");
+      div.innerHTML = `
+        <span class="emoji">${item.animal}</span>
+        <span class="name">${escapeHtml(item.name)}</span>
+        <span class="box">${checked[i] ? "✓" : ""}</span>`;
+      div.onclick = () => toggleItem(i);
       wrap.appendChild(div);
     });
   }
-  function toggleItem(i){
-    var list=getList(currentListId);
-    checked[i]=!checked[i];
-    saveChecked(list,mode,checked);
-    if(checked[i]) speakKey("item_checked",{ item:list.items[i].name });
+
+  function toggleItem(i) {
+    const list = getList(currentListId);
+    checked[i] = !checked[i];
+    saveChecked(list, mode, checked);
     renderCheck();
-    if(list.items.length>0 && checked.every(Boolean)){ setTimeout(finish,700); }
-  }
-  function finish(){
-    var list=getList(currentListId);
-    var info=MODE_INFO[mode];
-    clearChecked(list,mode);
-    $("doneChar").src=info.doneImg;
-    $("doneTitle").textContent=info.doneTitle;
-    var now=new Date();
-    var hh=String(now.getHours()).padStart(2,"0");
-    var mm=String(now.getMinutes()).padStart(2,"0");
-    $("doneTime").textContent=L().doneTime(hh,mm);
-    $("homeReturnBtn").textContent=L().homeReturn;
-    show("screenDone");
-    speakKey("all_checked");
+    if (list.items.length > 0 && checked.every(Boolean)) {
+      setTimeout(finish, 600);
+    }
   }
 
-  function openEdit(){
-    data=loadData();
-    var list=getList(currentListId);
-    if(!list){ renderHome(); return; }
-    $("editTitle").textContent=L().editTitlePre+list.name+L().editTitleSuf;
-    $("editSub").textContent=L().editSub;
-    $("newItemName").placeholder=L().newItemPh;
-    $("addItemBtn").textContent=L().addItem;
-    $("editBackBtn").textContent=L().editBack;
-    $("deleteListBtn").textContent=L().deleteList;
+  // ── 完成：只清這份清單這個模式的勾選，物品與別份都不動 ──
+  function finish() {
+    const list = getList(currentListId);
+    const info = MODE_INFO[mode];
+    clearChecked(list, mode);
+    $("doneEmoji").textContent = info.doneEmoji;
+    $("doneTitle").textContent = info.doneTitle;
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    $("doneTime").textContent = `完成時間 ${hh}:${mm}`;
+    show("screenDone");
+  }
+
+  // ── 整理清單 ──
+  function openEdit() {
+    data = loadData();
+    const list = getList(currentListId);
+    if (!list) { renderHome(); return; }
+    $("editTitle").textContent = "✏️ 整理「" + list.name + "」";
     renderEdit();
     show("screenEdit");
   }
-  function renderEdit(){
-    var list=getList(currentListId);
-    var wrap=$("editList"); wrap.innerHTML="";
-    if(list.items.length===0){
-      var hint=document.createElement("div");
-      hint.className="empty-hint"; hint.innerHTML=L().emptyEdit;
+
+  function renderEdit() {
+    const list = getList(currentListId);
+    const wrap = $("editList");
+    wrap.innerHTML = "";
+    if (list.items.length === 0) {
+      const hint = document.createElement("div");
+      hint.className = "empty-hint";
+      hint.innerHTML = "清單是空的，下面打名字加東西吧！";
       wrap.appendChild(hint);
     } else {
-      list.items.forEach(function(item,i){
-        var div=document.createElement("div");
-        div.className="edit-item";
-        div.innerHTML='<span class="e-emoji">'+item.animal+'</span>'
-          +'<span class="e-name">'+escapeHtml(item.name)+'</span>';
-        var del=document.createElement("button");
-        del.className="del-btn"; del.textContent="✕";
-        del.onclick=function(){ removeItem(i); };
+      list.items.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "edit-item";
+        div.innerHTML = `
+          <span class="e-emoji">${item.animal}</span>
+          <span class="e-name">${escapeHtml(item.name)}</span>`;
+        const del = document.createElement("button");
+        del.className = "del-btn";
+        del.textContent = "✕";
+        del.onclick = () => removeItem(i);
         div.appendChild(del);
         wrap.appendChild(div);
       });
     }
   }
-  function addItem(){
-    var list=getList(currentListId);
-    var input=$("newItemName");
-    var name=input.value.trim();
-    if(!name){ input.focus(); return; }
-    for(var k=0;k<list.items.length;k++){ if(list.items[k].name===name){ input.select(); return; } }
-    list.items.push({ name:name, animal:pickAnimal(list) });
-    saveData(); input.value=""; renderEdit(); input.focus();
-  }
-  function removeItem(i){
-    var list=getList(currentListId);
-    if(!confirm(L().confirmDelItem(list.items[i].name))) return;
-    list.items.splice(i,1); saveData(); renderEdit();
-  }
-  function deleteList(){
-    var list=getList(currentListId);
-    if(!confirm(L().confirmDelList(list.name))) return;
-    var idx=-1; for(var i=0;i<data.lists.length;i++){ if(data.lists[i].id===currentListId){ idx=i; break; } }
-    if(idx>=0) data.lists.splice(idx,1);
-    saveData(); renderHome();
+
+  function addItem() {
+    const list = getList(currentListId);
+    const input = $("newItemName");
+    const name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    if (list.items.some(it => it.name === name)) { input.select(); return; }
+    list.items.push({ name, animal: pickAnimal(list) });
+    saveData();
+    input.value = "";
+    renderEdit();
+    input.focus();
   }
 
-  var setDraft = {};
-  function openSettings(){
-    setDraft = { lang:profile.lang, char:profile.char, name:profile.name, gender:profile.gender };
-    var l=L();
-    $("setTitle").textContent=l.setTitle;
-    $("setLangTitle").textContent=l.setLang;
-    $("setCharTitle").textContent=l.setChar;
-    $("setNameTitle").textContent=l.setName;
-    $("setGenderTitle").textContent=l.setGender;
-    $("setSave").textContent=l.setSave;
-    $("setBack").textContent=l.setBack;
-    $("setBoyLabel").textContent=l.gBoy;
-    $("setGirlLabel").textContent=l.gGirl;
-    var sel=$("setLangSelect"); sel.innerHTML="";
-    LANGS.forEach(function(x){
-      var o=document.createElement("option");
-      o.value=x.code; o.textContent=x.label;
-      if(x.code===setDraft.lang) o.selected=true;
-      sel.appendChild(o);
-    });
-    $("setNameInput").value=setDraft.name;
-    reflectSetChar(); reflectSetGender();
-    show("screenSettings");
+  function removeItem(i) {
+    const list = getList(currentListId);
+    if (!confirm(`要把「${list.items[i].name}」刪掉嗎？`)) return;
+    list.items.splice(i, 1);
+    saveData();
+    renderEdit();
   }
-  function reflectSetChar(){
-    $("setAwei").classList.toggle("sel", setDraft.char==="awei");
-    $("setXiaoqing").classList.toggle("sel", setDraft.char==="xiaoqing");
-  }
-  function reflectSetGender(){
-    $("setBoy").classList.toggle("sel", setDraft.gender==="boy");
-    $("setGirl").classList.toggle("sel", setDraft.gender==="girl");
-  }
-  $("setAwei").onclick=function(){ setDraft.char="awei"; reflectSetChar(); };
-  $("setXiaoqing").onclick=function(){ setDraft.char="xiaoqing"; reflectSetChar(); };
-  $("setBoy").onclick=function(){ setDraft.gender="boy"; reflectSetGender(); };
-  $("setGirl").onclick=function(){ setDraft.gender="girl"; reflectSetGender(); };
-  $("setLangSelect").onchange=function(){ setDraft.lang=this.value; };
-  $("setSave").onclick=function(){
-    profile.lang=setDraft.lang;
-    profile.char=setDraft.char;
-    var nm=$("setNameInput").value.trim();
-    if(nm) profile.name=nm.slice(0,12);
-    profile.gender=setDraft.gender;
-    saveProfile();
-    enterHome();
-  };
-  $("setBack").onclick=function(){ enterHome(); };
-  $("openSettings").onclick=openSettings;
 
-  $("addListBtn").onclick=addList;
-  $("goBtn").onclick=function(){ startCheck("outbound"); };
-  $("homeBtn").onclick=function(){ startCheck("inbound"); };
-  $("editEntryBtn").onclick=openEdit;
-  $("listBackBtn").onclick=renderHome;
-  $("backBtn").onclick=function(){ openList(currentListId); };
-  $("editBackBtn").onclick=function(){ openList(currentListId); };
-  $("addItemBtn").onclick=addItem;
-  $("deleteListBtn").onclick=deleteList;
-  $("homeReturnBtn").onclick=function(){ openList(currentListId); };
-  $("newItemName").addEventListener("keydown",function(e){ if(e.key==="Enter") addItem(); });
+  function deleteList() {
+    const list = getList(currentListId);
+    if (!confirm(`要刪掉整份「${list.name}」清單嗎？\n裡面的東西都會一起不見喔。`)) return;
+    const idx = data.lists.findIndex(l => l.id === currentListId);
+    if (idx >= 0) data.lists.splice(idx, 1);
+    saveData();
+    renderHome();
+  }
 
-  /* ========== 開場 ========== */
-  /* 一次性強制重設：清掉舊設定，保證從語言頁開始 */
-  try { localStorage.removeItem(PROFILE_KEY); } catch(e){}
-  profile=null;
-  startOnboarding();
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  // ── 事件綁定 ──
+  $("addListBtn").onclick = addList;
+  $("goBtn").onclick = () => startCheck("outbound");
+  $("homeBtn").onclick = () => startCheck("inbound");
+  $("editEntryBtn").onclick = openEdit;
+  $("listBackBtn").onclick = renderHome;
+  $("backBtn").onclick = () => openList(currentListId);
+  $("editBackBtn").onclick = () => openList(currentListId);
+  $("addItemBtn").onclick = addItem;
+  $("deleteListBtn").onclick = deleteList;
+  $("homeReturnBtn").onclick = () => openList(currentListId);
+  $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
+
+  // 開場
+  renderHome();
 </script>
+
 </body>
 </html>
