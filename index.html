@@ -64,6 +64,7 @@
     background: none; border: none; color: #5BA8E5; font-size: 13px;
     font-family: inherit; cursor: pointer; text-decoration: underline;
   }
+  .greet-line { font-size: 16px; color: var(--ink); font-weight: bold; margin-bottom: 14px; min-height: 22px; }
   .mode-btn {
     width: 100%; border: none; border-radius: 22px; padding: 22px; font-size: 22px;
     font-weight: bold; font-family: inherit; color: #fff; cursor: pointer; margin-bottom: 14px;
@@ -160,7 +161,7 @@
 <!-- 登入 -->
 <div class="screen active" id="screenLogin">
   <h1>🐻 帶好了嗎？</h1>
-  <p class="intro-line" id="loginLine">哈囉～歡迎來這裡！</p>
+  <p class="intro-line" id="loginLine">哈囉～歡迎來這裡！先打你的名字，再打密碼喔！</p>
   <div class="field-label">你叫什麼名字呀？</div>
   <input class="name-big" id="loginName" maxlength="8" placeholder="在這裡打名字">
   <div class="field-label">輸入密碼（123）</div>
@@ -173,10 +174,10 @@
 <div class="screen" id="screenHome">
   <div class="topbar">
     <span class="who" id="whoLabel"></span>
-    <button class="logout-link" id="logoutBtn">換我自己以外的人？登出</button>
+    <button class="logout-link" id="logoutBtn">換人</button>
   </div>
   <h1>🐻 帶好了嗎？</h1>
-  <p class="sub">選一份清單，或做一份新的！</p>
+  <p class="greet-line" id="greetLine"></p>
   <div id="listCards"></div>
   <button class="add-list" id="addListBtn">➕ 做一份新清單</button>
 </div>
@@ -185,7 +186,7 @@
 <div class="screen" id="screenNewList">
   <h1>做一份新清單</h1>
   <p class="sub">這份清單要叫什麼名字呢？</p>
-  <input class="name-big" id="newListName" maxlength="12" placeholder="例如：去上學、去打球">
+  <input class="name-big" id="newListName" maxlength="12" placeholder="例如：禮拜一、上學">
   <button class="primary-btn" id="newListOk">好了</button>
   <button class="back" id="newListCancel">← 先不要</button>
 </div>
@@ -238,18 +239,19 @@
     outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀" },
     inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
-  const USERS_KEY = "checklist_users";   // { name: { password, lists:[...] } }
+  const WD = ["禮拜天","禮拜一","禮拜二","禮拜三","禮拜四","禮拜五","禮拜六"];
+  const ALLDAYS = [["禮拜一","上學"],["禮拜二","上學"],["禮拜三","上學"],["禮拜四","上學"],["禮拜五","上學"],["禮拜六","假日活動"],["禮拜天","假日活動"]];
+  const USERS_KEY = "checklist_users";
   const FIXED_PW = "123";
 
   let users = {};
-  let currentUser = null;   // 目前登入的名字
+  let currentUser = null;
   let currentListId = null;
   let mode = null;
   let checked = [];
 
   const $ = (id) => document.getElementById(id);
 
-  // ── 語音 ──
   function speak(text) {
     if (!('speechSynthesis' in window) || !text) return;
     const u = new SpeechSynthesisUtterance(text);
@@ -257,7 +259,6 @@
     window.speechSynthesis.speak(u);
   }
 
-  // ── 手指提示 ──
   function showHand(el) {
     const hand = $("handHint");
     if (!el) { hand.style.display = "none"; return; }
@@ -270,14 +271,13 @@
   }
   function hideHand() { $("handHint").style.display = "none"; }
 
-  // ── 使用者資料層（各自獨立）──
   function loadUsers() {
     try { const raw = localStorage.getItem(USERS_KEY); if (!raw) return {};
       const u = JSON.parse(raw); return (u && typeof u === "object") ? u : {};
     } catch (e) { return {}; }
   }
   function saveUsers() { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-  function me() { return users[currentUser]; }   // 目前使用者的資料
+  function me() { return users[currentUser]; }
 
   function uid() { return "L" + Date.now() + Math.random().toString(36).slice(2, 6); }
   function getList(id) { return me().lists.find(l => l.id === id); }
@@ -310,24 +310,33 @@
       .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
   }
 
-  /* ===== 登入：名字唯一、密碼固定 123、撞名擋下 =====
-     規則：名字已存在 → 視為同一人，密碼對就登入；
-           名字不存在 → 新建立（註冊）。
-     「撞名要重新輸入」的擋下：見下方說明，新建立時若名字已被佔用且
-           密碼不符就擋。這裡同名即同一帳號，靠密碼確認本人。 */
+  // 動態提示：提示還沒建過的最前面那一天
+  function nextHint() {
+    const names = me().lists.map(l => l.name);
+    for (const [day, act] of ALLDAYS) {
+      if (!names.some(n => n.indexOf(day) >= 0)) return day + "、" + act;
+    }
+    return "禮拜一、上學";
+  }
+  // 首頁招呼：禮拜一特別講，其他天講星期幾
+  function greetText() {
+    const d = new Date().getDay();   // 0=日..6=六
+    if (d === 1) return "又過了一週了，今天要做什麼呢？";
+    return "今天是" + WD[d] + "，要帶什麼呢？我們來看看吧！";
+  }
+
+  /* ===== 登入 ===== */
   let loginSpoken = false;
   function startLogin() {
     currentUser = null; hideHand();
     show("screenLogin");
     $("loginName").value = ""; $("loginPw").value = ""; $("loginErr").textContent = "";
-    $("loginLine").textContent = "哈囉～歡迎來這裡！先打你的名字，再打密碼喔！";
     loginSpoken = false;
-    const sayHello = () => { if (loginSpoken) return; loginSpoken = true; speak("哈囉～歡迎來這裡！先打你的名字，再打密碼喔！"); };
-    $("loginName").addEventListener("focus", sayHello);
-    $("loginName").addEventListener("click", sayHello);
     showHand($("loginName"));
-    $("loginName").addEventListener("input", () => { if ($("loginName").value.trim()) showHand($("loginPw")); });
-    $("loginPw").addEventListener("focus", () => { showHand($("loginBtn")); });
+  }
+  function loginHello() {
+    if (loginSpoken) return; loginSpoken = true;
+    speak("哈囉～歡迎來這裡！先打你的名字，再打密碼喔！");
   }
   function doLogin() {
     const name = $("loginName").value.trim().slice(0, 8);
@@ -335,11 +344,7 @@
     if (!name) { $("loginErr").textContent = "先打你的名字喔！"; $("loginName").focus(); return; }
     if (pw !== FIXED_PW) { $("loginErr").textContent = "密碼是 123 喔！"; $("loginPw").focus(); return; }
     users = loadUsers();
-    if (!users[name]) {
-      // 新使用者：建立
-      users[name] = { password: FIXED_PW, lists: [] };
-      saveUsers();
-    }
+    if (!users[name]) { users[name] = { password: FIXED_PW, lists: [] }; saveUsers(); }
     currentUser = name;
     hideHand();
     speak(name + "，我們開始吧！");
@@ -350,6 +355,8 @@
   function renderHome() {
     currentListId = null; hideHand();
     $("whoLabel").textContent = "👤 " + currentUser;
+    const g = greetText();
+    $("greetLine").textContent = g;
     const wrap = $("listCards"); wrap.innerHTML = "";
     const lists = me().lists;
     if (lists.length === 0) {
@@ -366,13 +373,16 @@
       });
     }
     show("screenHome");
+    speak(g);
     if (lists.length === 0) showHand($("addListBtn")); else hideHand();
   }
   function logout() { startLogin(); }
 
-  /* ===== 新增清單 ===== */
+  /* ===== 新增清單（動態提示）===== */
   function openNewList() {
-    hideHand(); $("newListName").value = ""; show("screenNewList"); $("newListName").focus();
+    hideHand(); $("newListName").value = "";
+    $("newListName").placeholder = "例如：" + nextHint();
+    show("screenNewList"); $("newListName").focus();
   }
   function confirmNewList() {
     const name = $("newListName").value.trim();
@@ -494,8 +504,13 @@
   }
 
   /* ===== 事件綁定 ===== */
+  $("loginName").addEventListener("focus", loginHello);
+  $("loginName").addEventListener("click", loginHello);
+  $("loginName").addEventListener("input", () => { if ($("loginName").value.trim()) showHand($("loginPw")); });
+  $("loginPw").addEventListener("focus", () => showHand($("loginBtn")));
   $("loginBtn").onclick = doLogin;
   $("loginPw").addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+  $("loginName").addEventListener("keydown", (e) => { if (e.key === "Enter") $("loginPw").focus(); });
   $("logoutBtn").onclick = logout;
   $("addListBtn").onclick = openNewList;
   $("newListOk").onclick = confirmNewList;
