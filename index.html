@@ -6,100 +6,48 @@
 <title>帶好了嗎？</title>
 <style>
   :root {
-    --sky: #BDE3FF;
-    --card: #FFFFFF;
-    --ink: #324B6E;
-    --coral: #FF7B54;
-    --leaf: #4CC36B;
-    --star: #FFD449;
-    --soft: #EAF6FF;
-    --pink: #FF9AB5;
+    --sky: #BDE3FF; --card: #FFFFFF; --ink: #324B6E; --coral: #FF7B54;
+    --leaf: #4CC36B; --star: #FFD449; --soft: #EAF6FF; --pink: #FF9AB5;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "微軟正黑體", "Microsoft JhengHei", system-ui, sans-serif;
-    background: var(--sky);
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
+    background: var(--sky); color: var(--ink); min-height: 100vh;
+    display: flex; justify-content: center; align-items: center; padding: 16px;
   }
   .screen {
-    background: var(--card);
-    border-radius: 28px;
+    background: var(--card); border-radius: 28px;
     box-shadow: 0 8px 0 rgba(50,75,110,0.15);
-    width: 100%;
-    max-width: 420px;
-    padding: 32px 24px;
-    text-align: center;
-    display: none;
-    position: relative;
+    width: 100%; max-width: 420px; padding: 32px 24px;
+    text-align: center; display: none; position: relative;
   }
   .screen.active { display: block; animation: pop .35s ease; }
-  @keyframes pop {
-    0%   { transform: scale(.92); opacity: 0; }
-    100% { transform: scale(1);   opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
-  }
+  @keyframes pop { 0%{transform:scale(.92);opacity:0;} 100%{transform:scale(1);opacity:1;} }
+  @media (prefers-reduced-motion: reduce) { *{animation:none!important;transition:none!important;} }
 
   h1 { font-size: 26px; margin-bottom: 6px; }
   .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 22px; }
 
-  /* ===== 開場 ===== */
-  .intro-line {
-    font-size: 22px;
-    font-weight: bold;
-    line-height: 1.5;
-    margin: 30px 0 22px;
-    min-height: 34px;
-  }
+  .intro-line { font-size: 22px; font-weight: bold; line-height: 1.5; margin: 30px 0 22px; min-height: 34px; }
   .name-big {
-    width: 100%;
-    border: 3px solid #CDE3F5;
-    border-radius: 16px;
-    padding: 14px 16px;
-    font-size: 20px;
-    font-family: inherit;
-    color: var(--ink);
-    text-align: center;
-    margin-bottom: 16px;
+    width: 100%; border: 3px solid #CDE3F5; border-radius: 16px;
+    padding: 14px 16px; font-size: 20px; font-family: inherit;
+    color: var(--ink); text-align: center; margin-bottom: 16px;
   }
   .name-big:focus { outline: none; border-color: #5BA8E5; }
   .primary-btn {
-    width: 100%;
-    border: none;
-    border-radius: 20px;
-    padding: 16px;
-    font-size: 19px;
-    font-weight: bold;
-    font-family: inherit;
-    color: #fff;
-    background: var(--leaf);
-    cursor: pointer;
+    width: 100%; border: none; border-radius: 20px; padding: 16px;
+    font-size: 19px; font-weight: bold; font-family: inherit;
+    color: #fff; background: var(--leaf); cursor: pointer;
     box-shadow: 0 5px 0 rgba(0,0,0,0.12);
   }
   .primary-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
 
-  /* ===== 清單選擇（首頁）===== */
   .list-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    background: var(--soft);
-    border: 3px solid transparent;
-    border-radius: 20px;
-    padding: 16px 16px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    user-select: none;
-    transition: transform .1s, border-color .15s;
-    text-align: left;
-    font-family: inherit;
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    background: var(--soft); border: 3px solid transparent; border-radius: 20px;
+    padding: 16px 16px; margin-bottom: 12px; cursor: pointer; user-select: none;
+    transition: transform .1s, border-color .15s; text-align: left; font-family: inherit;
   }
   .list-card:active { transform: translateY(2px); }
   .list-card .l-emoji { font-size: 32px; }
@@ -109,246 +57,121 @@
   .list-card .l-go { font-size: 22px; color: #B9CCE0; }
 
   .add-list {
-    width: 100%;
-    border: 3px dashed #9DBEDB;
-    background: #fff;
-    border-radius: 20px;
-    padding: 16px;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: inherit;
-    color: #5BA8E5;
-    cursor: pointer;
-    margin-top: 4px;
+    width: 100%; border: 3px dashed #9DBEDB; background: #fff; border-radius: 20px;
+    padding: 16px; font-size: 18px; font-weight: bold; font-family: inherit;
+    color: #5BA8E5; cursor: pointer; margin-top: 4px;
   }
   .add-list:active { transform: translateY(2px); }
 
-  /* ===== 清單選單 ===== */
   .mode-btn {
-    width: 100%;
-    border: none;
-    border-radius: 22px;
-    padding: 22px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: inherit;
-    color: #fff;
-    cursor: pointer;
-    margin-bottom: 14px;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+    width: 100%; border: none; border-radius: 22px; padding: 22px;
+    font-size: 22px; font-weight: bold; font-family: inherit; color: #fff;
+    cursor: pointer; margin-bottom: 14px; box-shadow: 0 5px 0 rgba(0,0,0,0.12);
     transition: transform .1s;
   }
   .mode-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
-  #goBtn   { background: var(--coral); }
+  #goBtn { background: var(--coral); }
   #homeBtn { background: #5BA8E5; }
-  .resume {
-    display: block;
-    font-size: 13px;
-    font-weight: normal;
-    margin-top: 6px;
-    opacity: .95;
-  }
+  .resume { display: block; font-size: 13px; font-weight: normal; margin-top: 6px; opacity: .95; }
   .edit-entry {
-    width: 100%;
-    background: #fff;
-    border: 3px solid var(--star);
-    color: var(--ink);
-    border-radius: 18px;
-    padding: 14px;
-    font-size: 17px;
-    font-weight: bold;
-    font-family: inherit;
-    cursor: pointer;
-    margin-top: 6px;
+    width: 100%; background: #fff; border: 3px solid var(--star); color: var(--ink);
+    border-radius: 18px; padding: 14px; font-size: 17px; font-weight: bold;
+    font-family: inherit; cursor: pointer; margin-top: 6px;
   }
   .edit-entry:active { transform: translateY(2px); }
 
-  /* ===== 核對畫面 ===== */
   .mode-tag {
-    display: inline-block;
-    background: var(--soft);
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 8px;
+    display: inline-block; background: var(--soft); border-radius: 999px;
+    padding: 6px 16px; font-size: 15px; font-weight: bold; margin-bottom: 8px;
   }
   .progress { font-size: 16px; margin-bottom: 18px; letter-spacing: 4px; min-height: 20px; }
 
   .item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--soft);
-    border: 3px solid transparent;
-    border-radius: 18px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    user-select: none;
+    display: flex; align-items: center; gap: 14px; background: var(--soft);
+    border: 3px solid transparent; border-radius: 18px; padding: 14px 16px;
+    margin-bottom: 12px; cursor: pointer; user-select: none;
     transition: background .15s, border-color .15s;
   }
   .item .emoji { font-size: 30px; }
-  .item .name  { font-size: 19px; font-weight: bold; flex: 1; text-align: left; }
+  .item .name { font-size: 19px; font-weight: bold; flex: 1; text-align: left; }
   .item .box {
-    width: 32px; height: 32px;
-    border-radius: 10px;
-    border: 3px solid #B9CCE0;
-    background: #fff;
-    font-size: 20px;
-    line-height: 26px;
-    color: #fff;
+    width: 32px; height: 32px; border-radius: 10px; border: 3px solid #B9CCE0;
+    background: #fff; font-size: 20px; line-height: 26px; color: #fff;
   }
   .item.checked { background: #E6F7EC; border-color: var(--leaf); }
   .item.checked .box { background: var(--leaf); border-color: var(--leaf); }
   .item.checked .emoji { animation: bounce .4s ease; }
-  @keyframes bounce {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.4) rotate(-8deg); }
-    100% { transform: scale(1); }
-  }
+  @keyframes bounce { 0%{transform:scale(1);} 40%{transform:scale(1.4) rotate(-8deg);} 100%{transform:scale(1);} }
 
   .empty-hint {
-    background: var(--soft);
-    border-radius: 18px;
-    padding: 28px 16px;
-    color: #7A8DA8;
-    font-size: 16px;
-    margin-bottom: 12px;
-    line-height: 1.6;
+    background: var(--soft); border-radius: 18px; padding: 28px 16px;
+    color: #7A8DA8; font-size: 16px; margin-bottom: 12px; line-height: 1.6;
   }
-
   .back {
-    background: none;
-    border: none;
-    color: #7A8DA8;
-    font-size: 14px;
-    font-family: inherit;
-    cursor: pointer;
-    margin-top: 10px;
-    text-decoration: underline;
+    background: none; border: none; color: #7A8DA8; font-size: 14px;
+    font-family: inherit; cursor: pointer; margin-top: 10px; text-decoration: underline;
   }
 
-  /* ===== 整理清單畫面 ===== */
   .edit-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--soft);
-    border-radius: 16px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 12px; background: var(--soft);
+    border-radius: 16px; padding: 12px 14px; margin-bottom: 10px;
   }
   .edit-item .e-emoji { font-size: 28px; }
   .edit-item .e-name { font-size: 18px; font-weight: bold; flex: 1; text-align: left; }
   .del-btn {
-    border: none;
-    background: var(--pink);
-    color: #fff;
-    width: 38px; height: 38px;
-    border-radius: 12px;
-    font-size: 20px;
-    cursor: pointer;
-    flex-shrink: 0;
-    font-family: inherit;
+    border: none; background: var(--pink); color: #fff; width: 38px; height: 38px;
+    border-radius: 12px; font-size: 20px; cursor: pointer; flex-shrink: 0; font-family: inherit;
   }
   .del-btn:active { transform: translateY(2px); }
 
-  .add-row {
-    display: flex;
-    gap: 10px;
-    margin: 16px 0 8px;
-  }
+  .add-row { display: flex; gap: 10px; margin: 16px 0 8px; }
   .name-input {
-    flex: 1;
-    border: 3px solid #CDE3F5;
-    border-radius: 14px;
-    padding: 12px 14px;
-    font-size: 18px;
-    font-family: inherit;
-    color: var(--ink);
-    min-width: 0;
+    flex: 1; border: 3px solid #CDE3F5; border-radius: 14px; padding: 12px 14px;
+    font-size: 18px; font-family: inherit; color: var(--ink); min-width: 0;
   }
   .name-input:focus { outline: none; border-color: #5BA8E5; }
   .add-confirm {
-    background: var(--leaf);
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    padding: 0 22px;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: inherit;
-    cursor: pointer;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.12);
-    flex-shrink: 0;
+    background: var(--leaf); color: #fff; border: none; border-radius: 14px;
+    padding: 0 22px; font-size: 18px; font-weight: bold; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.12); flex-shrink: 0;
   }
   .add-confirm:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
 
   .delete-list-link {
-    background: none;
-    border: none;
-    color: var(--pink);
-    font-size: 14px;
-    font-family: inherit;
-    cursor: pointer;
-    margin-top: 4px;
-    text-decoration: underline;
-    display: block;
-    width: 100%;
+    background: none; border: none; color: var(--pink); font-size: 14px;
+    font-family: inherit; cursor: pointer; margin-top: 4px; text-decoration: underline;
+    display: block; width: 100%;
   }
 
-  /* ===== 完成畫面 ===== */
   .big-emoji { font-size: 64px; animation: party .6s ease; }
-  @keyframes party {
-    0%   { transform: scale(0) rotate(-30deg); }
-    70%  { transform: scale(1.2) rotate(8deg); }
-    100% { transform: scale(1) rotate(0); }
-  }
+  @keyframes party { 0%{transform:scale(0) rotate(-30deg);} 70%{transform:scale(1.2) rotate(8deg);} 100%{transform:scale(1) rotate(0);} }
   #doneTitle { margin-top: 10px; }
   #doneTime { color: #7A8DA8; font-size: 14px; margin: 10px 0 24px; }
   .stars { font-size: 26px; letter-spacing: 6px; margin-bottom: 8px; }
   #homeReturnBtn {
-    background: var(--star);
-    color: var(--ink);
-    border: none;
-    border-radius: 22px;
-    padding: 16px 36px;
-    font-size: 19px;
-    font-weight: bold;
-    font-family: inherit;
-    cursor: pointer;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+    background: var(--star); color: var(--ink); border: none; border-radius: 22px;
+    padding: 16px 36px; font-size: 19px; font-weight: bold; font-family: inherit;
+    cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.12);
   }
   #homeReturnBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
 
-  /* ===== 手指提示（獨立浮層）===== */
   #handHint {
-    position: fixed;
-    font-size: 40px;
-    z-index: 9999;
-    pointer-events: none;
-    display: none;
-    transition: top .3s ease, left .3s ease;
+    position: fixed; font-size: 40px; z-index: 9999; pointer-events: none;
+    display: none; transition: top .3s ease, left .3s ease;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     animation: handWiggle 1s ease-in-out infinite;
   }
-  @keyframes handWiggle {
-    0%, 100% { transform: translateX(0); }
-    50%      { transform: translateX(-12px); }
-  }
+  @keyframes handWiggle { 0%,100%{transform:translateX(0);} 50%{transform:translateX(-12px);} }
 </style>
 </head>
 <body>
 
-<!-- 畫面〇：開場 -->
 <div class="screen active" id="screenIntro">
   <h1>🐻 帶好了嗎？</h1>
   <p class="intro-line" id="introLine"></p>
   <div id="introBody"></div>
 </div>
 
-<!-- 畫面一：選清單（首頁）-->
 <div class="screen" id="screenHome">
   <h1>🐻 帶好了嗎？</h1>
   <p class="sub">選一份清單，或做一份新的！</p>
@@ -356,23 +179,15 @@
   <button class="add-list" id="addListBtn">➕ 做一份新清單</button>
 </div>
 
-<!-- 畫面二：清單選單 -->
 <div class="screen" id="screenList">
   <h1 id="listTitle"></h1>
   <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
-  <button class="mode-btn" id="goBtn">
-    🎒 我要出門了！
-    <span class="resume" id="goResume"></span>
-  </button>
-  <button class="mode-btn" id="homeBtn">
-    🏠 我要回家啦！
-    <span class="resume" id="homeResume"></span>
-  </button>
+  <button class="mode-btn" id="goBtn">🎒 我要出門了！<span class="resume" id="goResume"></span></button>
+  <button class="mode-btn" id="homeBtn">🏠 我要回家啦！<span class="resume" id="homeResume"></span></button>
   <button class="edit-entry" id="editEntryBtn">✏️ 整理這份清單</button>
   <button class="back" id="listBackBtn">← 回去選別份清單</button>
 </div>
 
-<!-- 畫面三：核對清單 -->
 <div class="screen" id="screenCheck">
   <span class="mode-tag" id="modeTag"></span>
   <p class="progress" id="progress"></p>
@@ -380,7 +195,6 @@
   <button class="back" id="backBtn">← 先回去（進度會記住喔）</button>
 </div>
 
-<!-- 畫面四：整理清單 -->
 <div class="screen" id="screenEdit">
   <h1 id="editTitle">✏️ 整理清單</h1>
   <p class="sub">固定要帶的留著就好，這次多帶的隨時加，不用了再刪！</p>
@@ -393,7 +207,6 @@
   <button class="delete-list-link" id="deleteListBtn">🗑️ 刪掉整份清單</button>
 </div>
 
-<!-- 畫面五：完成 -->
 <div class="screen" id="screenDone">
   <div class="big-emoji" id="doneEmoji">🎉</div>
   <div class="stars">⭐⭐⭐⭐⭐</div>
@@ -402,17 +215,14 @@
   <button id="homeReturnBtn">回去</button>
 </div>
 
-<!-- 手指提示浮層 -->
 <div id="handHint">👈</div>
 
 <script>
   const ANIMALS = ["🐻","🐰","🐱","🐶","🦊","🐧","🐸","🐥","🐼","🐨","🐯","🦁","🐮","🐷","🐵","🦉"];
-
   const MODE_INFO = {
     outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀" },
     inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
-
   const DATA_KEY = "checklist_data";
   const PROFILE_KEY = "checklist_profile";
 
@@ -424,23 +234,21 @@
 
   const $ = (id) => document.getElementById(id);
 
-  /* ========== 語音（瀏覽器即時語音，中性提示）==========
-     簡單可靠：要說話時直接 speak。語音由使用者點擊（按鈕、輸入）
-     觸發的畫面切換中呼叫，符合瀏覽器自動播放規範，不需預先解鎖。 */
+  /* ===== 語音：直接念 + resume 暖機，不等 voiceschanged（避免卡死）===== */
   function speak(text) {
     if (!window.speechSynthesis || !text) return;
     try {
-      window.speechSynthesis.cancel();
+      const s = window.speechSynthesis;
+      s.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = "zh-TW";
-      u.rate = 0.95;
-      u.pitch = 1.0;
-      window.speechSynthesis.speak(u);
+      u.lang = "zh-TW"; u.rate = 0.95; u.pitch = 1.0;
+      s.speak(u);
+      s.resume();
     } catch (e) {}
   }
   function nick() { return profile ? profile.nickname : ""; }
 
-  /* ========== 手指提示（獨立浮層）========== */
+  /* ===== 手指提示 ===== */
   function showHand(el) {
     const hand = $("handHint");
     if (!el) { hand.style.display = "none"; return; }
@@ -453,22 +261,15 @@
   }
   function hideHand() { $("handHint").style.display = "none"; }
 
-  /* ========== 資料讀寫 ========== */
   function loadData() {
-    try {
-      const raw = localStorage.getItem(DATA_KEY);
-      if (!raw) return { lists: [] };
-      const d = JSON.parse(raw);
-      return (d && Array.isArray(d.lists)) ? d : { lists: [] };
+    try { const raw = localStorage.getItem(DATA_KEY); if (!raw) return { lists: [] };
+      const d = JSON.parse(raw); return (d && Array.isArray(d.lists)) ? d : { lists: [] };
     } catch (e) { return { lists: [] }; }
   }
   function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
   function loadProfile() {
-    try {
-      const raw = localStorage.getItem(PROFILE_KEY);
-      if (!raw) return null;
-      const p = JSON.parse(raw);
-      return (p && p.nickname) ? p : null;
+    try { const raw = localStorage.getItem(PROFILE_KEY); if (!raw) return null;
+      const p = JSON.parse(raw); return (p && p.nickname) ? p : null;
     } catch (e) { return null; }
   }
   function saveProfile() { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }
@@ -476,52 +277,40 @@
   function getList(id) { return data.lists.find(l => l.id === id); }
 
   function pickAnimal(list) {
-    const count = {};
-    ANIMALS.forEach(a => count[a] = 0);
+    const count = {}; ANIMALS.forEach(a => count[a] = 0);
     list.items.forEach(it => { if (count[it.animal] !== undefined) count[it.animal]++; });
     let best = ANIMALS[0], min = Infinity;
     ANIMALS.forEach(a => { if (count[a] < min) { min = count[a]; best = a; } });
     return best;
   }
-
   function getChecked(list, m) {
     const byName = (list.progress && list.progress[m] && list.progress[m].byName) || {};
     return list.items.map(it => !!byName[it.name]);
   }
   function saveChecked(list, m, arr) {
     if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
-    const byName = {};
-    list.items.forEach((it, i) => { byName[it.name] = !!arr[i]; });
-    list.progress[m] = { byName };
-    saveData();
+    const byName = {}; list.items.forEach((it, i) => { byName[it.name] = !!arr[i]; });
+    list.progress[m] = { byName }; saveData();
   }
   function clearChecked(list, m) {
     if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
-    list.progress[m] = { byName: {} };
-    saveData();
+    list.progress[m] = { byName: {} }; saveData();
   }
-
   function show(id) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
   }
 
-  /* ========== 開場：問名字（開頭叫一次）========== */
+  /* ===== 開場：問名字（開頭叫一次）===== */
   function startIntro() {
-    hideHand();
-    show("screenIntro");
+    hideHand(); show("screenIntro");
     $("introLine").textContent = "哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？";
     $("introBody").innerHTML =
       '<input class="name-big" id="nickInput" maxlength="8" placeholder="在這裡打名字">' +
       '<button class="primary-btn" id="nickOk">好了</button>';
     $("nickInput").focus();
-    // 第一次點輸入框 / 按鈕（使用者手勢）時念開場白
-    let introSpoken = false;
-    const sayIntro = () => {
-      if (introSpoken) return;
-      introSpoken = true;
-      speak("哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？");
-    };
+    let spoken = false;
+    const sayIntro = () => { if (spoken) return; spoken = true; speak("哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？"); };
     $("nickInput").addEventListener("focus", sayIntro);
     $("nickInput").addEventListener("click", sayIntro);
     $("nickOk").onclick = submitName;
@@ -530,153 +319,99 @@
   function submitName() {
     const v = $("nickInput").value.trim();
     if (!v) { $("nickInput").focus(); return; }
-    profile = { nickname: v.slice(0, 8) };
-    saveProfile();
-    renderHome();
+    profile = { nickname: v.slice(0, 8) }; saveProfile(); renderHome();
   }
 
-  /* ========== 首頁 ========== */
+  /* ===== 首頁 ===== */
   function renderHome() {
-    data = loadData();
-    currentListId = null;
-    hideHand();
-    const wrap = $("listCards");
-    wrap.innerHTML = "";
-
+    data = loadData(); currentListId = null; hideHand();
+    const wrap = $("listCards"); wrap.innerHTML = "";
     if (data.lists.length === 0) {
-      const hint = document.createElement("div");
-      hint.className = "empty-hint";
-      hint.innerHTML = "還沒有清單喔！<br>按下面做一份新的吧 🐰";
-      wrap.appendChild(hint);
+      const hint = document.createElement("div"); hint.className = "empty-hint";
+      hint.innerHTML = "還沒有清單喔！<br>按下面做一份新的吧 🐰"; wrap.appendChild(hint);
     } else {
       data.lists.forEach(list => {
         const emoji = list.items.length > 0 ? list.items[0].animal : "📋";
-        const card = document.createElement("button");
-        card.className = "list-card";
-        card.innerHTML = `
-          <span class="l-emoji">${emoji}</span>
-          <span class="l-info">
-            <span class="l-name">${escapeHtml(list.name)}</span>
-            <span class="l-count">${list.items.length} 樣東西</span>
-          </span>
-          <span class="l-go">›</span>`;
-        card.onclick = () => openList(list.id);
-        wrap.appendChild(card);
+        const card = document.createElement("button"); card.className = "list-card";
+        card.innerHTML = `<span class="l-emoji">${emoji}</span>
+          <span class="l-info"><span class="l-name">${escapeHtml(list.name)}</span>
+          <span class="l-count">${list.items.length} 樣東西</span></span><span class="l-go">›</span>`;
+        card.onclick = () => openList(list.id); wrap.appendChild(card);
       });
     }
     show("screenHome");
-
-    if (data.lists.length === 0) {
-      speak("還沒有清單喔！按下面做一份新的吧！");
-      showHand($("addListBtn"));
-    } else {
-      hideHand();
-    }
+    if (data.lists.length === 0) { speak("還沒有清單喔！按下面做一份新的吧！"); showHand($("addListBtn")); }
+    else { hideHand(); }
   }
-
   function addList() {
     const name = (prompt("這份清單要叫什麼名字？\n（例如：禮拜一、去打球）") || "").trim();
     if (!name) return;
-    data.lists.push({
-      id: uid(),
-      name: name.slice(0, 12),
-      items: [],
-      progress: { outbound: { byName: {} }, inbound: { byName: {} } }
-    });
-    saveData();
-    renderHome();
+    data.lists.push({ id: uid(), name: name.slice(0, 12), items: [],
+      progress: { outbound: { byName: {} }, inbound: { byName: {} } } });
+    saveData(); renderHome();
   }
 
-  /* ========== 清單選單 ========== */
+  /* ===== 清單選單：手指只在「清單還沒東西」時指整理；有東西就不指 ===== */
   function openList(id) {
-    data = loadData();
-    const list = getList(id);
+    data = loadData(); const list = getList(id);
     if (!list) { renderHome(); return; }
-    currentListId = id;
-    $("listTitle").textContent = list.name;
+    currentListId = id; $("listTitle").textContent = list.name;
     const go = getChecked(list, "outbound").filter(Boolean).length;
     const back = getChecked(list, "inbound").filter(Boolean).length;
     const n = list.items.length;
     $("goResume").textContent   = go   > 0 ? `已經勾了 ${go}／${n} 樣，繼續吧！` : "";
     $("homeResume").textContent = back > 0 ? `已經勾了 ${back}／${n} 樣，繼續吧！` : "";
     show("screenList");
-
     if (n === 0) {
-      speak("先來整理清單，把要帶的東西加進去吧！");
+      speak("還沒有東西喔！先來整理清單，把要帶的東西加進去吧！");
       showHand($("editEntryBtn"));
     } else {
       speak("要出門了嗎？來檢查東西帶了沒！");
-      showHand($("goBtn"));
+      hideHand();   // 有東西就不一直指出門，讓使用者自己選
     }
   }
 
-  /* ========== 核對畫面 ========== */
+  /* ===== 核對畫面 ===== */
   function startCheck(m) {
-    data = loadData();
-    const list = getList(currentListId);
+    data = loadData(); const list = getList(currentListId);
     if (!list) { renderHome(); return; }
-    mode = m;
-    checked = getChecked(list, m);
-    renderCheck();
-    show("screenCheck");
+    mode = m; checked = getChecked(list, m); renderCheck(); show("screenCheck");
     if (list.items.length > 0) speak("一個一個檢查，帶了就點一下打勾！");
   }
-
   function renderCheck() {
     const list = getList(currentListId);
     $("modeTag").textContent = MODE_INFO[mode].tag;
-    const wrap = $("itemList");
-    wrap.innerHTML = "";
-    hideHand();
-
+    const wrap = $("itemList"); wrap.innerHTML = ""; hideHand();
     if (list.items.length === 0) {
       $("progress").textContent = "";
-      const hint = document.createElement("div");
-      hint.className = "empty-hint";
+      const hint = document.createElement("div"); hint.className = "empty-hint";
       hint.innerHTML = "這份清單還沒有東西耶！<br>先回去按「整理這份清單」加東西吧 🐰";
-      wrap.appendChild(hint);
-      return;
+      wrap.appendChild(hint); return;
     }
-
     $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
     let firstUnchecked = -1;
     list.items.forEach((item, i) => {
       const div = document.createElement("div");
       div.className = "item" + (checked[i] ? " checked" : "");
-      div.innerHTML = `
-        <span class="emoji">${item.animal}</span>
+      div.innerHTML = `<span class="emoji">${item.animal}</span>
         <span class="name">${escapeHtml(item.name)}</span>
         <span class="box">${checked[i] ? "✓" : ""}</span>`;
-      div.onclick = () => toggleItem(i);
-      wrap.appendChild(div);
+      div.onclick = () => toggleItem(i); wrap.appendChild(div);
       if (!checked[i] && firstUnchecked === -1) firstUnchecked = i;
     });
-
-    if (firstUnchecked >= 0) {
-      showHand(wrap.children[firstUnchecked]);
-    } else {
-      hideHand();
-    }
+    if (firstUnchecked >= 0) showHand(wrap.children[firstUnchecked]); else hideHand();
   }
-
   function toggleItem(i) {
     const list = getList(currentListId);
-    checked[i] = !checked[i];
-    saveChecked(list, mode, checked);
-    renderCheck();
-    if (list.items.length > 0 && checked.every(Boolean)) {
-      setTimeout(finish, 600);
-    }
+    checked[i] = !checked[i]; saveChecked(list, mode, checked); renderCheck();
+    if (list.items.length > 0 && checked.every(Boolean)) setTimeout(finish, 600);
   }
 
-  /* ========== 完成：結尾叫一次名字 ========== */
+  /* ===== 完成：結尾叫一次名字 ===== */
   function finish() {
-    const list = getList(currentListId);
-    const info = MODE_INFO[mode];
-    clearChecked(list, mode);
-    hideHand();
-    $("doneEmoji").textContent = info.doneEmoji;
-    $("doneTitle").textContent = info.doneTitle;
+    const list = getList(currentListId); const info = MODE_INFO[mode];
+    clearChecked(list, mode); hideHand();
+    $("doneEmoji").textContent = info.doneEmoji; $("doneTitle").textContent = info.doneTitle;
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
@@ -686,82 +421,57 @@
     speak(n ? `${n}好棒～全部都帶好了！` : "好棒～全部都帶好了！");
   }
 
-  /* ========== 整理清單 ========== */
+  /* ===== 整理清單：手指持續指「加進去」，不再催使用者離開 ===== */
   function openEdit() {
-    data = loadData();
-    const list = getList(currentListId);
+    data = loadData(); const list = getList(currentListId);
     if (!list) { renderHome(); return; }
     $("editTitle").textContent = "✏️ 整理「" + list.name + "」";
-    renderEdit();
-    show("screenEdit");
+    renderEdit(); show("screenEdit");
     speak("想想看，要帶什麼呢？想到就加進來吧！");
     showHand($("addItemBtn"));
   }
-
   function renderEdit() {
     const list = getList(currentListId);
-    const wrap = $("editList");
-    wrap.innerHTML = "";
+    const wrap = $("editList"); wrap.innerHTML = "";
     if (list.items.length === 0) {
-      const hint = document.createElement("div");
-      hint.className = "empty-hint";
-      hint.innerHTML = "清單是空的，下面打名字加東西吧！";
-      wrap.appendChild(hint);
+      const hint = document.createElement("div"); hint.className = "empty-hint";
+      hint.innerHTML = "清單是空的，下面打名字加東西吧！"; wrap.appendChild(hint);
     } else {
       list.items.forEach((item, i) => {
-        const div = document.createElement("div");
-        div.className = "edit-item";
-        div.innerHTML = `
-          <span class="e-emoji">${item.animal}</span>
+        const div = document.createElement("div"); div.className = "edit-item";
+        div.innerHTML = `<span class="e-emoji">${item.animal}</span>
           <span class="e-name">${escapeHtml(item.name)}</span>`;
-        const del = document.createElement("button");
-        del.className = "del-btn";
-        del.textContent = "✕";
-        del.onclick = () => removeItem(i);
-        div.appendChild(del);
-        wrap.appendChild(div);
+        const del = document.createElement("button"); del.className = "del-btn";
+        del.textContent = "✕"; del.onclick = () => removeItem(i);
+        div.appendChild(del); wrap.appendChild(div);
       });
     }
   }
-
   function addItem() {
-    const list = getList(currentListId);
-    const input = $("newItemName");
+    const list = getList(currentListId); const input = $("newItemName");
     const name = input.value.trim();
     if (!name) { input.focus(); return; }
     if (list.items.some(it => it.name === name)) { input.select(); return; }
     list.items.push({ name, animal: pickAnimal(list) });
-    saveData();
-    input.value = "";
-    renderEdit();
-    input.focus();
-    showHand($("editBackBtn"));
+    saveData(); input.value = ""; renderEdit(); input.focus();
+    showHand($("addItemBtn"));   // 加完仍指「加進去」，鼓勵繼續加，不催離開
   }
-
   function removeItem(i) {
     const list = getList(currentListId);
     if (!confirm(`要把「${list.items[i].name}」刪掉嗎？`)) return;
-    list.items.splice(i, 1);
-    saveData();
-    renderEdit();
+    list.items.splice(i, 1); saveData(); renderEdit();
   }
-
   function deleteList() {
     const list = getList(currentListId);
     if (!confirm(`要刪掉整份「${list.name}」清單嗎？\n裡面的東西都會一起不見喔。`)) return;
     const idx = data.lists.findIndex(l => l.id === currentListId);
-    if (idx >= 0) data.lists.splice(idx, 1);
-    saveData();
-    renderHome();
+    if (idx >= 0) data.lists.splice(idx, 1); saveData(); renderHome();
   }
-
   function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
   }
 
-  /* ========== 事件綁定 ========== */
   $("addListBtn").onclick = addList;
   $("goBtn").onclick = () => startCheck("outbound");
   $("homeBtn").onclick = () => startCheck("inbound");
@@ -774,13 +484,8 @@
   $("homeReturnBtn").onclick = () => openList(currentListId);
   $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
 
-  /* ========== 啟動 ========== */
   profile = loadProfile();
-  if (profile) {
-    renderHome();
-  } else {
-    startIntro();
-  }
+  if (profile) { renderHome(); } else { startIntro(); }
 </script>
 
 </body>
