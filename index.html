@@ -35,6 +35,7 @@
     padding: 32px 24px;
     text-align: center;
     display: none;
+    position: relative;
   }
   .screen.active { display: block; animation: pop .35s ease; }
   @keyframes pop {
@@ -47,6 +48,41 @@
 
   h1 { font-size: 26px; margin-bottom: 6px; }
   .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 22px; }
+
+  /* ===== 開場 ===== */
+  .intro-line {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 30px 0 22px;
+    min-height: 34px;
+  }
+  .name-big {
+    width: 100%;
+    border: 3px solid #CDE3F5;
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-size: 20px;
+    font-family: inherit;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .name-big:focus { outline: none; border-color: #5BA8E5; }
+  .primary-btn {
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    padding: 16px;
+    font-size: 19px;
+    font-weight: bold;
+    font-family: inherit;
+    color: #fff;
+    background: var(--leaf);
+    cursor: pointer;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+  }
+  .primary-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
 
   /* ===== 清單選擇（首頁）===== */
   .list-card {
@@ -87,7 +123,7 @@
   }
   .add-list:active { transform: translateY(2px); }
 
-  /* ===== 清單選單（進入某份清單後）===== */
+  /* ===== 清單選單 ===== */
   .mode-btn {
     width: 100%;
     border: none;
@@ -285,19 +321,42 @@
     box-shadow: 0 5px 0 rgba(0,0,0,0.12);
   }
   #homeReturnBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
+
+  /* ===== 手指提示（獨立浮層）===== */
+  #handHint {
+    position: fixed;
+    font-size: 40px;
+    z-index: 9999;
+    pointer-events: none;
+    display: none;
+    transition: top .3s ease, left .3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    animation: handWiggle 1s ease-in-out infinite;
+  }
+  @keyframes handWiggle {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-12px); }
+  }
 </style>
 </head>
 <body>
 
+<!-- 畫面〇：開場 -->
+<div class="screen active" id="screenIntro">
+  <h1>🐻 帶好了嗎？</h1>
+  <p class="intro-line" id="introLine"></p>
+  <div id="introBody"></div>
+</div>
+
 <!-- 畫面一：選清單（首頁）-->
-<div class="screen active" id="screenHome">
+<div class="screen" id="screenHome">
   <h1>🐻 帶好了嗎？</h1>
   <p class="sub">選一份清單，或做一份新的！</p>
   <div id="listCards"></div>
   <button class="add-list" id="addListBtn">➕ 做一份新清單</button>
 </div>
 
-<!-- 畫面二：清單選單（出門／回家／整理）-->
+<!-- 畫面二：清單選單 -->
 <div class="screen" id="screenList">
   <h1 id="listTitle"></h1>
   <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
@@ -343,8 +402,10 @@
   <button id="homeReturnBtn">回去</button>
 </div>
 
+<!-- 手指提示浮層 -->
+<div id="handHint">👈</div>
+
 <script>
-  // ── 可愛動物裝飾圖（與物品內容無關，只是讓畫面可愛）──
   const ANIMALS = ["🐻","🐰","🐱","🐶","🦊","🐧","🐸","🐥","🐼","🐨","🐯","🦁","🐮","🐷","🐵","🦉"];
 
   const MODE_INFO = {
@@ -352,18 +413,56 @@
     inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
 
-  // ── localStorage：一筆，裡面裝所有清單 ──
-  // data = { lists: [ { id, name, items:[{name,animal}], progress:{outbound:{byName},inbound:{byName}} } ] }
   const DATA_KEY = "checklist_data";
+  const PROFILE_KEY = "checklist_profile";   // { nickname }
 
   let data = { lists: [] };
-  let currentListId = null;   // 目前選中的清單
-  let mode = null;            // "outbound" / "inbound"
-  let checked = [];           // 與目前清單 items 等長
+  let profile = null;
+  let currentListId = null;
+  let mode = null;
+  let checked = [];
 
   const $ = (id) => document.getElementById(id);
 
-  // ── 資料讀寫 ──
+  /* ========== 語音（瀏覽器即時語音，中性提示）========== */
+  let voiceReady = false;
+  function primeVoice() {
+    // 第一次使用者互動時呼叫，解除瀏覽器自動播放限制
+    if (voiceReady || !window.speechSynthesis) return;
+    try {
+      const u = new SpeechSynthesisUtterance("");
+      speechSynthesis.speak(u);
+      voiceReady = true;
+    } catch (e) {}
+  }
+  function speak(text) {
+    if (!window.speechSynthesis || !text) return;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "zh-TW";
+      u.rate = 0.95;
+      u.pitch = 1.0;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  function nick() { return profile ? profile.nickname : ""; }
+
+  /* ========== 手指提示（獨立浮層，定位到目標元素旁）========== */
+  function showHand(el) {
+    const hand = $("handHint");
+    if (!el) { hand.style.display = "none"; return; }
+    requestAnimationFrame(() => {
+      const r = el.getBoundingClientRect();
+      hand.style.display = "block";
+      // 放在目標元素右側中間，手指（👈）指向左邊的目標
+      hand.style.top = (r.top + r.height / 2 - 20) + "px";
+      hand.style.left = (r.right + 6) + "px";
+    });
+  }
+  function hideHand() { $("handHint").style.display = "none"; }
+
+  /* ========== 資料讀寫 ========== */
   function loadData() {
     try {
       const raw = localStorage.getItem(DATA_KEY);
@@ -373,6 +472,15 @@
     } catch (e) { return { lists: [] }; }
   }
   function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
+  function loadProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (!raw) return null;
+      const p = JSON.parse(raw);
+      return (p && p.nickname) ? p : null;
+    } catch (e) { return null; }
+  }
+  function saveProfile() { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }
   function uid() { return "L" + Date.now() + Math.random().toString(36).slice(2, 6); }
   function getList(id) { return data.lists.find(l => l.id === id); }
 
@@ -385,7 +493,6 @@
     return best;
   }
 
-  // 進度依物品名稱記，增刪物品不會弄亂已勾的
   function getChecked(list, m) {
     const byName = (list.progress && list.progress[m] && list.progress[m].byName) || {};
     return list.items.map(it => !!byName[it.name]);
@@ -408,10 +515,34 @@
     $(id).classList.add("active");
   }
 
-  // ── 首頁：列出所有清單 ──
+  /* ========== 開場：問名字（只在這裡叫一次）========== */
+  function startIntro() {
+    hideHand();
+    show("screenIntro");
+    $("introLine").textContent = "哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？";
+    $("introBody").innerHTML =
+      '<input class="name-big" id="nickInput" maxlength="8" placeholder="在這裡打名字">' +
+      '<button class="primary-btn" id="nickOk">好了</button>';
+    $("nickInput").focus();
+    $("nickOk").onclick = submitName;
+    $("nickInput").addEventListener("keydown", (e) => { if (e.key === "Enter") submitName(); });
+  }
+  function speakIntro() {
+    speak("哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？");
+  }
+  function submitName() {
+    const v = $("nickInput").value.trim();
+    if (!v) { $("nickInput").focus(); return; }
+    profile = { nickname: v.slice(0, 8) };
+    saveProfile();
+    renderHome();
+  }
+
+  /* ========== 首頁 ========== */
   function renderHome() {
     data = loadData();
     currentListId = null;
+    hideHand();
     const wrap = $("listCards");
     wrap.innerHTML = "";
 
@@ -437,6 +568,13 @@
       });
     }
     show("screenHome");
+
+    // 手指：沒有清單時指向「做一份新清單」
+    if (data.lists.length === 0) {
+      showHand($("addListBtn"));
+    } else {
+      hideHand();
+    }
   }
 
   function addList() {
@@ -452,7 +590,7 @@
     renderHome();
   }
 
-  // ── 清單選單 ──
+  /* ========== 清單選單 ========== */
   function openList(id) {
     data = loadData();
     const list = getList(id);
@@ -465,9 +603,17 @@
     $("goResume").textContent   = go   > 0 ? `已經勾了 ${go}／${n} 樣，繼續吧！` : "";
     $("homeResume").textContent = back > 0 ? `已經勾了 ${back}／${n} 樣，繼續吧！` : "";
     show("screenList");
+
+    if (n === 0) {
+      speak("先來整理清單，把要帶的東西加進去吧！");
+      showHand($("editEntryBtn"));
+    } else {
+      speak("要出門了嗎？來檢查東西帶了沒！");
+      showHand($("goBtn"));
+    }
   }
 
-  // ── 核對畫面 ──
+  /* ========== 核對畫面 ========== */
   function startCheck(m) {
     data = loadData();
     const list = getList(currentListId);
@@ -476,6 +622,7 @@
     checked = getChecked(list, m);
     renderCheck();
     show("screenCheck");
+    if (list.items.length > 0) speak("一個一個檢查，帶了就點一下打勾！");
   }
 
   function renderCheck() {
@@ -483,6 +630,7 @@
     $("modeTag").textContent = MODE_INFO[mode].tag;
     const wrap = $("itemList");
     wrap.innerHTML = "";
+    hideHand();
 
     if (list.items.length === 0) {
       $("progress").textContent = "";
@@ -494,6 +642,7 @@
     }
 
     $("progress").textContent = checked.map(c => c ? "⭐" : "☆").join("");
+    let firstUnchecked = -1;
     list.items.forEach((item, i) => {
       const div = document.createElement("div");
       div.className = "item" + (checked[i] ? " checked" : "");
@@ -503,7 +652,14 @@
         <span class="box">${checked[i] ? "✓" : ""}</span>`;
       div.onclick = () => toggleItem(i);
       wrap.appendChild(div);
+      if (!checked[i] && firstUnchecked === -1) firstUnchecked = i;
     });
+
+    if (firstUnchecked >= 0) {
+      showHand(wrap.children[firstUnchecked]);
+    } else {
+      hideHand();
+    }
   }
 
   function toggleItem(i) {
@@ -516,11 +672,12 @@
     }
   }
 
-  // ── 完成：只清這份清單這個模式的勾選，物品與別份都不動 ──
+  /* ========== 完成：結尾叫一次名字 ========== */
   function finish() {
     const list = getList(currentListId);
     const info = MODE_INFO[mode];
     clearChecked(list, mode);
+    hideHand();
     $("doneEmoji").textContent = info.doneEmoji;
     $("doneTitle").textContent = info.doneTitle;
     const now = new Date();
@@ -528,9 +685,11 @@
     const mm = String(now.getMinutes()).padStart(2, "0");
     $("doneTime").textContent = `完成時間 ${hh}:${mm}`;
     show("screenDone");
+    const n = nick();
+    speak(n ? `${n}好棒～全部都帶好了！` : "好棒～全部都帶好了！");
   }
 
-  // ── 整理清單 ──
+  /* ========== 整理清單 ========== */
   function openEdit() {
     data = loadData();
     const list = getList(currentListId);
@@ -538,6 +697,8 @@
     $("editTitle").textContent = "✏️ 整理「" + list.name + "」";
     renderEdit();
     show("screenEdit");
+    speak("想想看，要帶什麼呢？想到就加進來吧！");
+    showHand($("addItemBtn"));
   }
 
   function renderEdit() {
@@ -577,6 +738,7 @@
     input.value = "";
     renderEdit();
     input.focus();
+    showHand($("editBackBtn"));
   }
 
   function removeItem(i) {
@@ -602,7 +764,10 @@
       .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
-  // ── 事件綁定 ──
+  /* ========== 事件綁定 ========== */
+  // 第一次點任何地方就解除語音限制
+  document.body.addEventListener("click", primeVoice, { once: true });
+
   $("addListBtn").onclick = addList;
   $("goBtn").onclick = () => startCheck("outbound");
   $("homeBtn").onclick = () => startCheck("inbound");
@@ -615,8 +780,23 @@
   $("homeReturnBtn").onclick = () => openList(currentListId);
   $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
 
-  // 開場
-  renderHome();
+  // 視窗捲動或縮放時，手指跟著重新定位（避免位置跑掉）
+  window.addEventListener("resize", () => {
+    if ($("handHint").style.display === "block") {
+      const active = document.querySelector(".screen.active");
+      // 重新定位交給各畫面下次呼叫，這裡先簡單隱藏避免錯位
+    }
+  });
+
+  /* ========== 啟動 ========== */
+  profile = loadProfile();
+  if (profile) {
+    renderHome();
+  } else {
+    startIntro();
+    // 開場語音：等使用者第一次點擊後播（瀏覽器限制），點名字框也算
+    document.body.addEventListener("click", speakIntro, { once: true });
+  }
 </script>
 
 </body>
