@@ -414,7 +414,7 @@
   };
 
   const DATA_KEY = "checklist_data";
-  const PROFILE_KEY = "checklist_profile";   // { nickname }
+  const PROFILE_KEY = "checklist_profile";
 
   let data = { lists: [] };
   let profile = null;
@@ -424,38 +424,29 @@
 
   const $ = (id) => document.getElementById(id);
 
-  /* ========== 語音（瀏覽器即時語音，中性提示）========== */
-  let voiceReady = false;
-  function primeVoice() {
-    // 第一次使用者互動時呼叫，解除瀏覽器自動播放限制
-    if (voiceReady || !window.speechSynthesis) return;
-    try {
-      const u = new SpeechSynthesisUtterance("");
-      speechSynthesis.speak(u);
-      voiceReady = true;
-    } catch (e) {}
-  }
+  /* ========== 語音（瀏覽器即時語音，中性提示）==========
+     簡單可靠：要說話時直接 speak。語音由使用者點擊（按鈕、輸入）
+     觸發的畫面切換中呼叫，符合瀏覽器自動播放規範，不需預先解鎖。 */
   function speak(text) {
     if (!window.speechSynthesis || !text) return;
     try {
-      speechSynthesis.cancel();
+      window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = "zh-TW";
       u.rate = 0.95;
       u.pitch = 1.0;
-      speechSynthesis.speak(u);
+      window.speechSynthesis.speak(u);
     } catch (e) {}
   }
   function nick() { return profile ? profile.nickname : ""; }
 
-  /* ========== 手指提示（獨立浮層，定位到目標元素旁）========== */
+  /* ========== 手指提示（獨立浮層）========== */
   function showHand(el) {
     const hand = $("handHint");
     if (!el) { hand.style.display = "none"; return; }
     requestAnimationFrame(() => {
       const r = el.getBoundingClientRect();
       hand.style.display = "block";
-      // 放在目標元素右側中間，手指（👈）指向左邊的目標
       hand.style.top = (r.top + r.height / 2 - 20) + "px";
       hand.style.left = (r.right + 6) + "px";
     });
@@ -515,7 +506,7 @@
     $(id).classList.add("active");
   }
 
-  /* ========== 開場：問名字（只在這裡叫一次）========== */
+  /* ========== 開場：問名字（開頭叫一次）========== */
   function startIntro() {
     hideHand();
     show("screenIntro");
@@ -524,11 +515,17 @@
       '<input class="name-big" id="nickInput" maxlength="8" placeholder="在這裡打名字">' +
       '<button class="primary-btn" id="nickOk">好了</button>';
     $("nickInput").focus();
+    // 第一次點輸入框 / 按鈕（使用者手勢）時念開場白
+    let introSpoken = false;
+    const sayIntro = () => {
+      if (introSpoken) return;
+      introSpoken = true;
+      speak("哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？");
+    };
+    $("nickInput").addEventListener("focus", sayIntro);
+    $("nickInput").addEventListener("click", sayIntro);
     $("nickOk").onclick = submitName;
     $("nickInput").addEventListener("keydown", (e) => { if (e.key === "Enter") submitName(); });
-  }
-  function speakIntro() {
-    speak("哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？");
   }
   function submitName() {
     const v = $("nickInput").value.trim();
@@ -569,8 +566,8 @@
     }
     show("screenHome");
 
-    // 手指：沒有清單時指向「做一份新清單」
     if (data.lists.length === 0) {
+      speak("還沒有清單喔！按下面做一份新的吧！");
       showHand($("addListBtn"));
     } else {
       hideHand();
@@ -765,9 +762,6 @@
   }
 
   /* ========== 事件綁定 ========== */
-  // 第一次點任何地方就解除語音限制
-  document.body.addEventListener("click", primeVoice, { once: true });
-
   $("addListBtn").onclick = addList;
   $("goBtn").onclick = () => startCheck("outbound");
   $("homeBtn").onclick = () => startCheck("inbound");
@@ -780,22 +774,12 @@
   $("homeReturnBtn").onclick = () => openList(currentListId);
   $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
 
-  // 視窗捲動或縮放時，手指跟著重新定位（避免位置跑掉）
-  window.addEventListener("resize", () => {
-    if ($("handHint").style.display === "block") {
-      const active = document.querySelector(".screen.active");
-      // 重新定位交給各畫面下次呼叫，這裡先簡單隱藏避免錯位
-    }
-  });
-
   /* ========== 啟動 ========== */
   profile = loadProfile();
   if (profile) {
     renderHome();
   } else {
     startIntro();
-    // 開場語音：等使用者第一次點擊後播（瀏覽器限制），點名字框也算
-    document.body.addEventListener("click", speakIntro, { once: true });
   }
 </script>
 
