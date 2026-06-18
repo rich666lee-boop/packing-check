@@ -26,23 +26,20 @@
   @media (prefers-reduced-motion: reduce) { *{animation:none!important;transition:none!important;} }
   h1 { font-size: 26px; margin-bottom: 6px; }
   .sub { color: #7A8DA8; font-size: 15px; margin-bottom: 22px; }
-  .intro-line { font-size: 22px; font-weight: bold; line-height: 1.5; margin: 30px 0 22px; min-height: 34px; }
+  .intro-line { font-size: 21px; font-weight: bold; line-height: 1.5; margin: 24px 0 18px; min-height: 30px; }
+  .field-label { text-align: left; font-size: 14px; color: #7A8DA8; margin: 10px 2px 4px; font-weight: bold; }
   .name-big {
     width: 100%; border: 3px solid #CDE3F5; border-radius: 16px; padding: 14px 16px;
-    font-size: 20px; font-family: inherit; color: var(--ink); text-align: center; margin-bottom: 16px;
+    font-size: 20px; font-family: inherit; color: var(--ink); text-align: center; margin-bottom: 6px;
   }
   .name-big:focus { outline: none; border-color: #5BA8E5; }
+  .err-msg { color: var(--coral); font-size: 14px; font-weight: bold; min-height: 20px; margin: 4px 0 8px; }
   .primary-btn {
     width: 100%; border: none; border-radius: 20px; padding: 16px; font-size: 19px;
     font-weight: bold; font-family: inherit; color: #fff; background: var(--leaf);
-    cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.12);
+    cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.12); margin-top: 6px;
   }
   .primary-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
-  .ghost-btn {
-    width: 100%; border: 3px solid #CDE3F5; background: #fff; border-radius: 18px;
-    padding: 12px; font-size: 16px; font-family: inherit; color: #7A8DA8;
-    cursor: pointer; margin-top: 10px;
-  }
   .list-card {
     display: flex; align-items: center; gap: 12px; width: 100%; background: var(--soft);
     border: 3px solid transparent; border-radius: 20px; padding: 16px; margin-bottom: 12px;
@@ -61,6 +58,12 @@
     color: #5BA8E5; cursor: pointer; margin-top: 4px;
   }
   .add-list:active { transform: translateY(2px); }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .topbar .who { font-size: 14px; color: #7A8DA8; }
+  .logout-link {
+    background: none; border: none; color: #5BA8E5; font-size: 13px;
+    font-family: inherit; cursor: pointer; text-decoration: underline;
+  }
   .mode-btn {
     width: 100%; border: none; border-radius: 22px; padding: 22px; font-size: 22px;
     font-weight: bold; font-family: inherit; color: #fff; cursor: pointer; margin-bottom: 14px;
@@ -154,28 +157,40 @@
 </head>
 <body>
 
-<div class="screen active" id="screenIntro">
+<!-- 登入 -->
+<div class="screen active" id="screenLogin">
   <h1>🐻 帶好了嗎？</h1>
-  <p class="intro-line" id="introLine"></p>
-  <div id="introBody"></div>
+  <p class="intro-line" id="loginLine">哈囉～歡迎來這裡！</p>
+  <div class="field-label">你叫什麼名字呀？</div>
+  <input class="name-big" id="loginName" maxlength="8" placeholder="在這裡打名字">
+  <div class="field-label">輸入密碼（123）</div>
+  <input class="name-big" id="loginPw" maxlength="6" inputmode="numeric" placeholder="1 2 3">
+  <div class="err-msg" id="loginErr"></div>
+  <button class="primary-btn" id="loginBtn">進去</button>
 </div>
 
+<!-- 首頁 -->
 <div class="screen" id="screenHome">
+  <div class="topbar">
+    <span class="who" id="whoLabel"></span>
+    <button class="logout-link" id="logoutBtn">換我自己以外的人？登出</button>
+  </div>
   <h1>🐻 帶好了嗎？</h1>
   <p class="sub">選一份清單，或做一份新的！</p>
   <div id="listCards"></div>
   <button class="add-list" id="addListBtn">➕ 做一份新清單</button>
 </div>
 
-<!-- 新增清單：畫面內輸入 -->
+<!-- 新增清單 -->
 <div class="screen" id="screenNewList">
   <h1>做一份新清單</h1>
   <p class="sub">這份清單要叫什麼名字呢？</p>
   <input class="name-big" id="newListName" maxlength="12" placeholder="例如：去上學、去打球">
   <button class="primary-btn" id="newListOk">好了</button>
-  <button class="ghost-btn" id="newListCancel">先不要</button>
+  <button class="back" id="newListCancel">← 先不要</button>
 </div>
 
+<!-- 清單選單 -->
 <div class="screen" id="screenList">
   <h1 id="listTitle"></h1>
   <p class="sub">出門前、回家前，勾勾看東西都在嗎！</p>
@@ -185,6 +200,7 @@
   <button class="back" id="listBackBtn">← 回去選別份清單</button>
 </div>
 
+<!-- 核對 -->
 <div class="screen" id="screenCheck">
   <span class="mode-tag" id="modeTag"></span>
   <p class="progress" id="progress"></p>
@@ -192,6 +208,7 @@
   <button class="back" id="backBtn">← 先回去（進度會記住喔）</button>
 </div>
 
+<!-- 整理 -->
 <div class="screen" id="screenEdit">
   <h1 id="editTitle">✏️ 整理清單</h1>
   <p class="sub">固定要帶的留著就好，這次多帶的隨時加，不用了再刪！</p>
@@ -204,6 +221,7 @@
   <button class="delete-list-link" id="deleteListBtn">🗑️ 刪掉整份清單</button>
 </div>
 
+<!-- 完成 -->
 <div class="screen" id="screenDone">
   <div class="big-emoji" id="doneEmoji">🎉</div>
   <div class="stars">⭐⭐⭐⭐⭐</div>
@@ -220,25 +238,24 @@
     outbound: { tag: "🎒 出門檢查", doneTitle: "全部帶齊，出發囉！", doneEmoji: "🚀" },
     inbound:  { tag: "🏠 回家檢查", doneTitle: "全部帶上了，好棒！", doneEmoji: "🎉" },
   };
-  const DATA_KEY = "checklist_data";
-  const PROFILE_KEY = "checklist_profile";
+  const USERS_KEY = "checklist_users";   // { name: { password, lists:[...] } }
+  const FIXED_PW = "123";
 
-  let data = { lists: [] };
-  let profile = null;
+  let users = {};
+  let currentUser = null;   // 目前登入的名字
   let currentListId = null;
   let mode = null;
   let checked = [];
 
   const $ = (id) => document.getElementById(id);
 
-  // ── 語音：最單純寫法 ──
+  // ── 語音 ──
   function speak(text) {
     if (!('speechSynthesis' in window) || !text) return;
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "zh-TW"; u.rate = 1; u.pitch = 1;
     window.speechSynthesis.speak(u);
   }
-  function nick() { return profile ? profile.nickname : ""; }
 
   // ── 手指提示 ──
   function showHand(el) {
@@ -253,20 +270,17 @@
   }
   function hideHand() { $("handHint").style.display = "none"; }
 
-  function loadData() {
-    try { const raw = localStorage.getItem(DATA_KEY); if (!raw) return { lists: [] };
-      const d = JSON.parse(raw); return (d && Array.isArray(d.lists)) ? d : { lists: [] };
-    } catch (e) { return { lists: [] }; }
+  // ── 使用者資料層（各自獨立）──
+  function loadUsers() {
+    try { const raw = localStorage.getItem(USERS_KEY); if (!raw) return {};
+      const u = JSON.parse(raw); return (u && typeof u === "object") ? u : {};
+    } catch (e) { return {}; }
   }
-  function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
-  function loadProfile() {
-    try { const raw = localStorage.getItem(PROFILE_KEY); if (!raw) return null;
-      const p = JSON.parse(raw); return (p && p.nickname) ? p : null;
-    } catch (e) { return null; }
-  }
-  function saveProfile() { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }
+  function saveUsers() { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+  function me() { return users[currentUser]; }   // 目前使用者的資料
+
   function uid() { return "L" + Date.now() + Math.random().toString(36).slice(2, 6); }
-  function getList(id) { return data.lists.find(l => l.id === id); }
+  function getList(id) { return me().lists.find(l => l.id === id); }
   function pickAnimal(list) {
     const count = {}; ANIMALS.forEach(a => count[a] = 0);
     list.items.forEach(it => { if (count[it.animal] !== undefined) count[it.animal]++; });
@@ -281,48 +295,68 @@
   function saveChecked(list, m, arr) {
     if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
     const byName = {}; list.items.forEach((it, i) => { byName[it.name] = !!arr[i]; });
-    list.progress[m] = { byName }; saveData();
+    list.progress[m] = { byName }; saveUsers();
   }
   function clearChecked(list, m) {
     if (!list.progress) list.progress = { outbound: { byName: {} }, inbound: { byName: {} } };
-    list.progress[m] = { byName: {} }; saveData();
+    list.progress[m] = { byName: {} }; saveUsers();
   }
   function show(id) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
   }
-
-  // ── 開場：問名字（開頭叫一次名字）──
-  function startIntro() {
-    hideHand(); show("screenIntro");
-    $("introLine").textContent = "哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？";
-    $("introBody").innerHTML =
-      '<input class="name-big" id="nickInput" maxlength="8" placeholder="在這裡打名字">' +
-      '<button class="primary-btn" id="nickOk">好了</button>';
-    $("nickInput").focus();
-    let spoken = false;
-    const sayIntro = () => { if (spoken) return; spoken = true; speak("哈囉～歡迎來這裡！先告訴我，你叫什麼名字呀？"); };
-    $("nickInput").addEventListener("focus", sayIntro);
-    $("nickInput").addEventListener("click", sayIntro);
-    $("nickOk").onclick = submitName;
-    $("nickInput").addEventListener("keydown", (e) => { if (e.key === "Enter") submitName(); });
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
   }
-  function submitName() {
-    const v = $("nickInput").value.trim();
-    if (!v) { $("nickInput").focus(); return; }
-    profile = { nickname: v.slice(0, 8) }; saveProfile();
+
+  /* ===== 登入：名字唯一、密碼固定 123、撞名擋下 =====
+     規則：名字已存在 → 視為同一人，密碼對就登入；
+           名字不存在 → 新建立（註冊）。
+     「撞名要重新輸入」的擋下：見下方說明，新建立時若名字已被佔用且
+           密碼不符就擋。這裡同名即同一帳號，靠密碼確認本人。 */
+  let loginSpoken = false;
+  function startLogin() {
+    currentUser = null; hideHand();
+    show("screenLogin");
+    $("loginName").value = ""; $("loginPw").value = ""; $("loginErr").textContent = "";
+    $("loginLine").textContent = "哈囉～歡迎來這裡！先打你的名字，再打密碼喔！";
+    loginSpoken = false;
+    const sayHello = () => { if (loginSpoken) return; loginSpoken = true; speak("哈囉～歡迎來這裡！先打你的名字，再打密碼喔！"); };
+    $("loginName").addEventListener("focus", sayHello);
+    $("loginName").addEventListener("click", sayHello);
+    showHand($("loginName"));
+    $("loginName").addEventListener("input", () => { if ($("loginName").value.trim()) showHand($("loginPw")); });
+    $("loginPw").addEventListener("focus", () => { showHand($("loginBtn")); });
+  }
+  function doLogin() {
+    const name = $("loginName").value.trim().slice(0, 8);
+    const pw = $("loginPw").value.trim();
+    if (!name) { $("loginErr").textContent = "先打你的名字喔！"; $("loginName").focus(); return; }
+    if (pw !== FIXED_PW) { $("loginErr").textContent = "密碼是 123 喔！"; $("loginPw").focus(); return; }
+    users = loadUsers();
+    if (!users[name]) {
+      // 新使用者：建立
+      users[name] = { password: FIXED_PW, lists: [] };
+      saveUsers();
+    }
+    currentUser = name;
+    hideHand();
+    speak(name + "，我們開始吧！");
     renderHome();
   }
 
-  // ── 首頁 ──
+  /* ===== 首頁 ===== */
   function renderHome() {
-    data = loadData(); currentListId = null; hideHand();
+    currentListId = null; hideHand();
+    $("whoLabel").textContent = "👤 " + currentUser;
     const wrap = $("listCards"); wrap.innerHTML = "";
-    if (data.lists.length === 0) {
+    const lists = me().lists;
+    if (lists.length === 0) {
       const hint = document.createElement("div"); hint.className = "empty-hint";
       hint.innerHTML = "還沒有清單喔！<br>按下面做一份新的吧 🐰"; wrap.appendChild(hint);
     } else {
-      data.lists.forEach(list => {
+      lists.forEach(list => {
         const emoji = list.items.length > 0 ? list.items[0].animal : "📋";
         const card = document.createElement("button"); card.className = "list-card";
         card.innerHTML = `<span class="l-emoji">${emoji}</span>
@@ -332,27 +366,25 @@
       });
     }
     show("screenHome");
-    if (data.lists.length === 0) showHand($("addListBtn")); else hideHand();
+    if (lists.length === 0) showHand($("addListBtn")); else hideHand();
   }
+  function logout() { startLogin(); }
 
-  // ── 新增清單：畫面內輸入 ──
+  /* ===== 新增清單 ===== */
   function openNewList() {
-    hideHand();
-    $("newListName").value = "";
-    show("screenNewList");
-    $("newListName").focus();
+    hideHand(); $("newListName").value = ""; show("screenNewList"); $("newListName").focus();
   }
   function confirmNewList() {
     const name = $("newListName").value.trim();
     if (!name) { $("newListName").focus(); return; }
-    data.lists.push({ id: uid(), name: name.slice(0, 12), items: [],
+    me().lists.push({ id: uid(), name: name.slice(0, 12), items: [],
       progress: { outbound: { byName: {} }, inbound: { byName: {} } } });
-    saveData(); renderHome();
+    saveUsers(); renderHome();
   }
 
-  // ── 清單選單 ──
+  /* ===== 清單選單 ===== */
   function openList(id) {
-    data = loadData(); const list = getList(id);
+    const list = getList(id);
     if (!list) { renderHome(); return; }
     currentListId = id; $("listTitle").textContent = list.name;
     const go = getChecked(list, "outbound").filter(Boolean).length;
@@ -365,9 +397,9 @@
     else { speak("要出門了嗎？來檢查東西帶了沒！"); hideHand(); }
   }
 
-  // ── 核對畫面 ──
+  /* ===== 核對 ===== */
   function startCheck(m) {
-    data = loadData(); const list = getList(currentListId);
+    const list = getList(currentListId);
     if (!list) { renderHome(); return; }
     mode = m; checked = getChecked(list, m); renderCheck(); show("screenCheck");
     if (list.items.length > 0) speak("一個一個檢查，帶了就點一下打勾！");
@@ -401,7 +433,7 @@
     if (list.items.length > 0 && checked.every(Boolean)) setTimeout(finish, 600);
   }
 
-  // ── 完成：結尾叫一次名字 ──
+  /* ===== 完成：結尾叫一次名字 ===== */
   function finish() {
     const list = getList(currentListId); const info = MODE_INFO[mode];
     clearChecked(list, mode); hideHand();
@@ -411,13 +443,12 @@
     const mm = String(now.getMinutes()).padStart(2, "0");
     $("doneTime").textContent = `完成時間 ${hh}:${mm}`;
     show("screenDone");
-    const n = nick();
-    speak(n ? `${n}好棒～全部都帶好了！` : "好棒～全部都帶好了！");
+    speak(currentUser + "好棒～全部都帶好了！");
   }
 
-  // ── 整理清單 ──
+  /* ===== 整理 ===== */
   function openEdit() {
-    data = loadData(); const list = getList(currentListId);
+    const list = getList(currentListId);
     if (!list) { renderHome(); return; }
     $("editTitle").textContent = "✏️ 整理「" + list.name + "」";
     renderEdit(); show("screenEdit");
@@ -447,25 +478,25 @@
     if (!name) { input.focus(); return; }
     if (list.items.some(it => it.name === name)) { input.select(); return; }
     list.items.push({ name, animal: pickAnimal(list) });
-    saveData(); input.value = ""; renderEdit(); input.focus();
+    saveUsers(); input.value = ""; renderEdit(); input.focus();
     showHand($("addItemBtn"));
   }
   function removeItem(i) {
     const list = getList(currentListId);
     if (!confirm(`要把「${list.items[i].name}」刪掉嗎？`)) return;
-    list.items.splice(i, 1); saveData(); renderEdit();
+    list.items.splice(i, 1); saveUsers(); renderEdit();
   }
   function deleteList() {
     const list = getList(currentListId);
     if (!confirm(`要刪掉整份「${list.name}」清單嗎？\n裡面的東西都會一起不見喔。`)) return;
-    const idx = data.lists.findIndex(l => l.id === currentListId);
-    if (idx >= 0) data.lists.splice(idx, 1); saveData(); renderHome();
-  }
-  function escapeHtml(s) {
-    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+    const idx = me().lists.findIndex(l => l.id === currentListId);
+    if (idx >= 0) me().lists.splice(idx, 1); saveUsers(); renderHome();
   }
 
+  /* ===== 事件綁定 ===== */
+  $("loginBtn").onclick = doLogin;
+  $("loginPw").addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+  $("logoutBtn").onclick = logout;
   $("addListBtn").onclick = openNewList;
   $("newListOk").onclick = confirmNewList;
   $("newListCancel").onclick = renderHome;
@@ -481,8 +512,9 @@
   $("homeReturnBtn").onclick = () => openList(currentListId);
   $("newItemName").addEventListener("keydown", (e) => { if (e.key === "Enter") addItem(); });
 
-  profile = loadProfile();
-  if (profile) { renderHome(); } else { startIntro(); }
+  /* ===== 啟動：一律從登入開始 ===== */
+  users = loadUsers();
+  startLogin();
 </script>
 
 </body>
